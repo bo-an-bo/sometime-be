@@ -4,9 +4,13 @@ import { GroupModule } from './group/group.module';
 import { AuthModule } from './auth/auth.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { MemberModule } from './member/member.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     UserModule,
     GroupModule,
     AuthModule,
