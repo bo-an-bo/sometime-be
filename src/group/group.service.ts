@@ -5,7 +5,7 @@ import { UpdateGroupDto } from './dto/update-group.dto';
 @Injectable()
 export class GroupService {
   create(createGroupDto: CreateGroupDto) {
-    return 'This action adds a new group';
+    return createGroupDto;
   }
 
   findAll() {
@@ -17,7 +17,7 @@ export class GroupService {
   }
 
   update(id: number, updateGroupDto: UpdateGroupDto) {
-    return `This action updates a #${id} group`;
+    return { id, updateGroupDto };
   }
 
   remove(id: number) {

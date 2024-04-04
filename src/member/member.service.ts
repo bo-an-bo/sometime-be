@@ -5,7 +5,7 @@ import { UpdateMemberDto } from './dto/update-member.dto';
 @Injectable()
 export class MemberService {
   create(createMemberDto: CreateMemberDto) {
-    return 'This action adds a new member';
+    return createMemberDto;
   }
 
   findAll() {
@@ -17,7 +17,7 @@ export class MemberService {
   }
 
   update(id: number, updateMemberDto: UpdateMemberDto) {
-    return `This action updates a #${id} member`;
+    return { id, updateMemberDto };
   }
 
   remove(id: number) {
