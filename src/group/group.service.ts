@@ -1,15 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
+import { Group } from './entities/group.entity';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class GroupService {
+  constructor(
+    @Inject('GROUP_MODEL')
+    private readonly groupModel: Model<Group>,
+  ) {}
+
   create(createGroupDto: CreateGroupDto) {
-    return createGroupDto;
+    return this.groupModel.create(createGroupDto);
   }
 
   findAll() {
-    return `This action returns all group`;
+    return this.groupModel.find().exec();
   }
 
   findOne(id: number) {
