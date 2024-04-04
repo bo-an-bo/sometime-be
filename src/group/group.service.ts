@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
-import { Group } from './entities/group.entity';
 import { Model } from 'mongoose';
+import { Group } from './interfaces/group.interface';
 
 @Injectable()
 export class GroupService {
@@ -15,7 +15,7 @@ export class GroupService {
     return this.groupModel.create(createGroupDto);
   }
 
-  findAll() {
+  async findAll(): Promise<Group[]> {
     return this.groupModel.find().exec();
   }
 
