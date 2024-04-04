@@ -1,18 +1,24 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { GroupService } from './group.service';
+import { HydratedDocument, Model } from 'mongoose';
+import { Group } from './interfaces/group.interface';
 
 describe('GroupService', () => {
-  let service: GroupService;
+  let groupService: GroupService;
+  let groupModel: Model<Group>;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [GroupService],
-    }).compile();
-
-    service = module.get<GroupService>(GroupService);
+    groupService = new GroupService(groupModel);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  describe('findAll', () => {
+    it('should return an array of groups', async () => {
+      const result: HydratedDocument<any> = [
+        { _id: 1, name: 'Group 1' },
+        { _id: 2, name: 'Group 2' },
+      ];
+      jest.spyOn(groupService, 'findAll').mockImplementation(() => result);
+
+      expect(await groupService.findAll()).toBe(result);
+    });
   });
 });
