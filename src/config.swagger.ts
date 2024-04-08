@@ -9,6 +9,7 @@ export const configSwagger = (app: INestApplication<any>) => {
     .addTag('Member', '모임 회원 관련 API')
     .addTag('Transaction', '거래내역 관련 API')
     .addTag('User', '사용자 관련 API')
+    .addTag('Event', '이벤트 관련 API')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

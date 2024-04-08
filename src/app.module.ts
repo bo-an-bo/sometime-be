@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { MemberModule } from './member/member.module';
 import { ConfigModule } from '@nestjs/config';
+import { EventModule } from './event/event.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ConfigModule } from '@nestjs/config';
     AuthModule,
     TransactionModule,
     MemberModule,
+    EventModule,
   ],
 })
 export class AppModule {}
