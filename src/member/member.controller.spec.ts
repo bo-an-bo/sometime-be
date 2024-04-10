@@ -7,6 +7,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as process from 'process';
 import { memberProvider } from './member.provider';
 import { Member } from './entities/member.entity';
+import { MemberRepository } from './member.repository';
 
 describe('MemberController', () => {
   let memberController: MemberController;
@@ -20,7 +21,7 @@ describe('MemberController', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [DatabaseModule],
       controllers: [MemberController],
-      providers: [MemberService, ...memberProvider],
+      providers: [MemberService, ...memberProvider, MemberRepository],
     }).compile();
 
     memberService = module.get<MemberService>(MemberService);
