@@ -1,20 +1,19 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { MemberController } from './member.controller';
 import { MemberService } from './member.service';
+import { Member } from './interfaces/member.interface';
+import { Model } from 'mongoose';
 
 describe('MemberController', () => {
-  let controller: MemberController;
+  let memberController: MemberController;
+  let memberService: MemberService;
+  let memberModel: Model<Member>;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [MemberController],
-      providers: [MemberService],
-    }).compile();
-
-    controller = module.get<MemberController>(MemberController);
+    memberService = new MemberService(memberModel);
+    memberController = new MemberController(memberService);
   });
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(memberController).toBeDefined();
   });
 });
