@@ -1,1 +1,5 @@
-export class Member {}
+export class Member {
+  id: string;
+  name: string;
+  phoneNumber: string;
+}

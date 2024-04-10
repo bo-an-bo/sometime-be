@@ -12,22 +12,33 @@ export class GroupService {
   ) {}
 
   create(createGroupDto: CreateGroupDto) {
-    return this.groupModel.create(createGroupDto);
+    return new this.groupModel(createGroupDto).save();
   }
 
   async findAll(): Promise<Group[]> {
     return this.groupModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} group`;
+  removeAll() {
+    return this.groupModel.deleteMany({});
   }
 
-  update(id: number, updateGroupDto: UpdateGroupDto) {
-    return { id, updateGroupDto };
+  async findOne(id: string): Promise<Group> {
+    return this.groupModel.findById(id).exec();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} group`;
+  async update(id: string, updateGroupDto: UpdateGroupDto): Promise<Group> {
+    try {
+      const group = await this.groupModel.findById(id).exec();
+      group.name = updateGroupDto.name;
+      group.description = updateGroupDto.description;
+      return group.save();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async remove(id: string): Promise<Group> {
+    return this.groupModel.findByIdAndDelete(id);
   }
 }
