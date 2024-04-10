@@ -6,14 +6,17 @@ import {
   Param,
   Patch,
   Post,
+  UseFilters,
 } from '@nestjs/common';
 import { MemberService } from './member.service';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { HttpExceptionFilter } from '../http-exception.filter';
 
 @ApiTags('Member')
 @Controller('member')
+@UseFilters(HttpExceptionFilter)
 export class MemberController {
   constructor(private readonly memberService: MemberService) {}
 
@@ -58,8 +61,8 @@ export class MemberController {
     summary: '모든 회원 삭제',
     description: '모든 회원을 삭제합니다.',
   })
-  removeAll() {
-    return this.memberService.removeAll();
+  deleteAll() {
+    return this.memberService.deleteAll();
   }
 
   @Delete(':id')
@@ -67,7 +70,7 @@ export class MemberController {
     summary: '회원 삭제',
     description: '특정 회원을 삭제합니다.',
   })
-  remove(@Param('id') id: string) {
-    return this.memberService.remove(id);
+  delete(@Param('id') id: string) {
+    return this.memberService.delete(id);
   }
 }
