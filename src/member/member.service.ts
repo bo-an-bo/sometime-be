@@ -21,7 +21,10 @@ export class MemberService {
   }
 
   async update(id: string, updateMemberDto: UpdateMemberDto): Promise<Member> {
-    return (await this.memberRepository.update(id, updateMemberDto)) as Member;
+    return (await this.memberRepository.update(id, {
+      name: updateMemberDto.name,
+      phoneNumber: updateMemberDto.phoneNumber,
+    } as UpdateMemberDto)) as Member;
   }
 
   async delete(id: string): Promise<void> {

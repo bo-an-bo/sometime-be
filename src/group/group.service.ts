@@ -21,7 +21,10 @@ export class GroupService {
   }
 
   async update(id: string, updateGroupDto: UpdateGroupDto): Promise<Group> {
-    return (await this.groupRepository.update(id, updateGroupDto)) as Group;
+    return (await this.groupRepository.update(id, {
+      name: updateGroupDto.name,
+      description: updateGroupDto.description,
+    } as UpdateGroupDto)) as Group;
   }
 
   async delete(id: string): Promise<void> {
