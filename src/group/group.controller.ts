@@ -10,7 +10,7 @@ import {
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Group')
 @Controller('group')
@@ -18,27 +18,56 @@ export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
   @Post()
+  @ApiOperation({
+    summary: '모임 생성',
+    description: '모임을 생성합니다.',
+  })
   create(@Body() createGroupDto: CreateGroupDto) {
     return this.groupService.create(createGroupDto);
   }
 
   @Get()
+  @ApiOperation({
+    summary: '모든 모임 조회',
+    description: '모든 모임을 조회합니다.',
+  })
   findAll() {
     return this.groupService.findAll();
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: '모임 상세 조회',
+    description: '특정 모임을 조회합니다.',
+  })
   findOne(@Param('id') id: string) {
-    return this.groupService.findOne(+id);
+    return this.groupService.findOne(id);
   }
 
   @Patch(':id')
+  @ApiOperation({
+    summary: '모임 수정',
+    description: '특정 모임을 수정합니다.',
+  })
   update(@Param('id') id: string, @Body() updateGroupDto: UpdateGroupDto) {
-    return this.groupService.update(+id, updateGroupDto);
+    return this.groupService.update(id, updateGroupDto);
+  }
+
+  @Delete()
+  @ApiOperation({
+    summary: '모든 모임 삭제',
+    description: '모든 모임을 삭제합니다.',
+  })
+  removeAll() {
+    return this.groupService.removeAll();
   }
 
   @Delete(':id')
+  @ApiOperation({
+    summary: '모임 삭제',
+    description: '특정 모임을 삭제합니다.',
+  })
   remove(@Param('id') id: string) {
-    return this.groupService.remove(+id);
+    return this.groupService.remove(id);
   }
 }

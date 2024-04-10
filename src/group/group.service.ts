@@ -19,15 +19,19 @@ export class GroupService {
     return this.groupModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} group`;
+  removeAll() {
+    return this.groupModel.deleteMany({});
   }
 
-  update(id: number, updateGroupDto: UpdateGroupDto) {
-    return { id, updateGroupDto };
+  async findOne(id: string): Promise<Group> {
+    return this.groupModel.findById(id).exec();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} group`;
+  async update(id: string, updateGroupDto: UpdateGroupDto): Promise<Group> {
+    return this.groupModel.findByIdAndUpdate(id, updateGroupDto, { new: true });
+  }
+
+  async remove(id: string): Promise<Group> {
+    return this.groupModel.findByIdAndDelete(id);
   }
 }
