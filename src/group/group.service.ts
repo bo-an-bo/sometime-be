@@ -12,7 +12,8 @@ export class GroupService {
   ) {}
 
   create(createGroupDto: CreateGroupDto) {
-    return this.groupModel.create(createGroupDto);
+    const group = new this.groupModel(createGroupDto);
+    return group.save();
   }
 
   async findAll(): Promise<Group[]> {

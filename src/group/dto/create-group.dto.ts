@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ObjectId } from 'mongoose';
 
 export class CreateGroupDto {
   @ApiProperty({
@@ -31,7 +30,7 @@ export class CreateGroupDto {
   })
   readonly subManagers: [
     {
-      user: ObjectId;
+      user: string;
       authorities: string[];
     },
   ];
