@@ -2,11 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { configSwagger } from './config.swagger';
 import * as process from 'process';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   configSwagger(app);
-
+  app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
   await app.listen(process.env.SERVER_PORT);
 }
