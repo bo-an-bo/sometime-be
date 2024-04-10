@@ -12,8 +12,7 @@ export class GroupService {
   ) {}
 
   create(createGroupDto: CreateGroupDto) {
-    const group = new this.groupModel(createGroupDto);
-    return group.save();
+    return new this.groupModel(createGroupDto).save();
   }
 
   async findAll(): Promise<Group[]> {
@@ -29,7 +28,14 @@ export class GroupService {
   }
 
   async update(id: string, updateGroupDto: UpdateGroupDto): Promise<Group> {
-    return this.groupModel.findByIdAndUpdate(id, updateGroupDto, { new: true });
+    try {
+      const group = await this.groupModel.findById(id).exec();
+      group.name = updateGroupDto.name;
+      group.description = updateGroupDto.description;
+      return group.save();
+    } catch (e) {
+      return null;
+    }
   }
 
   async remove(id: string): Promise<Group> {
