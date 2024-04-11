@@ -1,44 +1,37 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { GroupRepository } from './group.repository';
 import { CreateGroupDto } from './dto/create-group.dto';
+import { Group } from './entities/group.entity';
 import { UpdateGroupDto } from './dto/update-group.dto';
-import { Model } from 'mongoose';
-import { Group } from './interfaces/group.interface';
 
 @Injectable()
 export class GroupService {
-  constructor(
-    @Inject('GROUP_MODEL')
-    private readonly groupModel: Model<Group>,
-  ) {}
+  constructor(private readonly groupRepository: GroupRepository) {}
 
-  create(createGroupDto: CreateGroupDto) {
-    return new this.groupModel(createGroupDto).save();
+  async create(createGroupDto: CreateGroupDto): Promise<Group> {
+    return (await this.groupRepository.create(createGroupDto)) as Group;
   }
 
   async findAll(): Promise<Group[]> {
-    return this.groupModel.find().exec();
-  }
-
-  removeAll() {
-    return this.groupModel.deleteMany({});
+    return (await this.groupRepository.findAll()) as Group[];
   }
 
   async findOne(id: string): Promise<Group> {
-    return this.groupModel.findById(id).exec();
+    return (await this.groupRepository.findOne(id)) as Group;
   }
 
   async update(id: string, updateGroupDto: UpdateGroupDto): Promise<Group> {
-    try {
-      const group = await this.groupModel.findById(id).exec();
-      group.name = updateGroupDto.name;
-      group.description = updateGroupDto.description;
-      return group.save();
-    } catch (e) {
-      return null;
-    }
+    return (await this.groupRepository.update(id, {
+      name: updateGroupDto.name,
+      description: updateGroupDto.description,
+    } as UpdateGroupDto)) as Group;
   }
 
-  async remove(id: string): Promise<Group> {
-    return this.groupModel.findByIdAndDelete(id);
+  async delete(id: string): Promise<void> {
+    return this.groupRepository.delete(id);
+  }
+
+  async deleteAll(): Promise<void> {
+    return this.groupRepository.deleteAll();
   }
 }

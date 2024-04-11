@@ -1,44 +1,37 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { MemberRepository } from './member.repository';
+import { Member } from './entities/member.entity';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
-import { Model } from 'mongoose';
-import { Member } from './interfaces/member.interface';
 
 @Injectable()
 export class MemberService {
-  constructor(
-    @Inject('MEMBER_MODEL')
-    private readonly memberModel: Model<Member>,
-  ) {}
+  constructor(private readonly memberRepository: MemberRepository) {}
 
-  create(createMemberDto: CreateMemberDto) {
-    return new this.memberModel(createMemberDto).save();
+  async create(createMemberDto: CreateMemberDto): Promise<Member> {
+    return (await this.memberRepository.create(createMemberDto)) as Member;
   }
 
   async findAll(): Promise<Member[]> {
-    return this.memberModel.find().exec();
-  }
-
-  removeAll() {
-    return this.memberModel.deleteMany({});
+    return (await this.memberRepository.findAll()) as Member[];
   }
 
   async findOne(id: string): Promise<Member> {
-    return this.memberModel.findById(id).exec();
+    return (await this.memberRepository.findOne(id)) as Member;
   }
 
   async update(id: string, updateMemberDto: UpdateMemberDto): Promise<Member> {
-    try {
-      const member = await this.memberModel.findById(id).exec();
-      member.name = updateMemberDto.name;
-      member.phoneNumber = updateMemberDto.phoneNumber;
-      return member.save();
-    } catch (e) {
-      return null;
-    }
+    return (await this.memberRepository.update(id, {
+      name: updateMemberDto.name,
+      phoneNumber: updateMemberDto.phoneNumber,
+    } as UpdateMemberDto)) as Member;
   }
 
-  async remove(id: string) {
-    return this.memberModel.findByIdAndDelete(id);
+  async delete(id: string): Promise<void> {
+    return this.memberRepository.delete(id);
+  }
+
+  async deleteAll(): Promise<void> {
+    return this.memberRepository.deleteAll();
   }
 }

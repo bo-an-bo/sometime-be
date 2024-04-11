@@ -3,10 +3,11 @@ import { GroupService } from './group.service';
 import { GroupController } from './group.controller';
 import { groupProvider } from './group.provider';
 import { DatabaseModule } from '../database/database.module';
+import { GroupRepository } from './group.repository';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [GroupController],
-  providers: [GroupService, ...groupProvider],
+  providers: [GroupService, ...groupProvider, GroupRepository],
 })
 export class GroupModule {}

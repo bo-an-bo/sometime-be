@@ -6,14 +6,17 @@ import {
   Param,
   Patch,
   Post,
+  UseFilters,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { HttpExceptionFilter } from '../http-exception.filter';
 
 @ApiTags('Group')
 @Controller('group')
+@UseFilters(HttpExceptionFilter)
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
@@ -58,8 +61,8 @@ export class GroupController {
     summary: '모든 모임 삭제',
     description: '모든 모임을 삭제합니다.',
   })
-  removeAll() {
-    return this.groupService.removeAll();
+  deleteAll() {
+    return this.groupService.deleteAll();
   }
 
   @Delete(':id')
@@ -67,7 +70,7 @@ export class GroupController {
     summary: '모임 삭제',
     description: '특정 모임을 삭제합니다.',
   })
-  remove(@Param('id') id: string) {
-    return this.groupService.remove(id);
+  delete(@Param('id') id: string) {
+    return this.groupService.delete(id);
   }
 }

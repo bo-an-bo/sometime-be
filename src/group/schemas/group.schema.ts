@@ -1,14 +1,17 @@
-import * as mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 
-export const GroupSchema = new mongoose.Schema({
+export const GroupSchema = new Schema({
   name: String,
   description: String,
   manager: String,
-  subManagers: [
-    {
-      user: String,
-      authorities: [String],
-    },
-  ],
-  members: [String],
+  subManagers: {
+    type: [
+      {
+        user: String,
+        authorities: [String],
+      },
+    ],
+    default: [],
+  },
+  members: { type: [String], default: [] },
 });
