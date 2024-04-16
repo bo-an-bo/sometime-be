@@ -6,13 +6,15 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
   UseFilters,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { HttpExceptionFilter } from '../http-exception.filter';
+import { ApiFile } from '../api-file.decorator';
 
 @ApiTags('Group')
 @Controller('group')
@@ -72,5 +74,23 @@ export class GroupController {
   })
   delete(@Param('id') id: string) {
     return this.groupService.delete(id);
+  }
+
+  @ApiOperation({
+    summary: '모임 회원 엑셀 파일 업로드',
+    description: '모임 회원 엑셀 파일을 업로드합니다.',
+  })
+  @Post(':id/member/excel')
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: '모임 ID',
+  })
+  @ApiFile('excel')
+  async uploadMemberFile(
+    @Param('id') id: string,
+    @UploadedFile() excel: Express.Multer.File,
+  ) {
+    return await this.groupService.convertExcelToJSON(id, excel);
   }
 }
