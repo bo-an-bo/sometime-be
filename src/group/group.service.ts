@@ -41,12 +41,19 @@ export class GroupService {
     await workbook.xlsx.load(excel.buffer);
 
     const worksheet = workbook.getWorksheet(1);
+
+    const columns = [];
+    worksheet.getRow(1).eachCell((cell) => {
+      columns.push(cell.value);
+    });
+
     const data = [];
     worksheet.eachRow((row, rowNumber) => {
       if (rowNumber !== 1) {
         const rowObject = {};
         row.eachCell((cell, colNumber) => {
-          rowObject[`column${colNumber}`] = cell.value;
+          const col = columns[colNumber - 1];
+          rowObject[col] = cell.value;
         });
         data.push(rowObject);
       }
