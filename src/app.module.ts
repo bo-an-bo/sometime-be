@@ -11,11 +11,11 @@ import { EventModule } from './event/event.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    UserModule,
     GroupModule,
-    AuthModule,
     MemberModule,
     EventModule,
+    AuthModule,
+    UserModule,
   ],
 })
 export class AppModule {}
