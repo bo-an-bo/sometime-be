@@ -19,18 +19,18 @@ export class MemberRepository {
     return this.memberModel.find().exec();
   }
 
-  findOne(id: string): Promise<Member> {
-    return this.memberModel.findById(id).exec();
+  findOne(memberId: string): Promise<Member> {
+    return this.memberModel.findById(memberId).exec();
   }
 
-  update(id: string, updateMemberDto: UpdateMemberDto): Promise<Member> {
+  update(memberId: string, updateMemberDto: UpdateMemberDto): Promise<Member> {
     return this.memberModel
-      .findByIdAndUpdate(id, updateMemberDto, { new: true })
+      .findByIdAndUpdate(memberId, updateMemberDto, { new: true })
       .exec();
   }
 
-  delete(id: string) {
-    this.memberModel.findByIdAndDelete(id);
+  delete(memberId: string) {
+    this.memberModel.findByIdAndDelete(memberId);
   }
 
   deleteAll() {
