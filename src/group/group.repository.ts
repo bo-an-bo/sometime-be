@@ -19,18 +19,18 @@ export class GroupRepository {
     return this.groupModel.find().exec();
   }
 
-  findOne(id: string): Promise<Group> {
-    return this.groupModel.findById(id).exec();
+  findOne(groupId: string): Promise<Group> {
+    return this.groupModel.findById(groupId).exec();
   }
 
-  update(id: string, updateGroupDto: UpdateGroupDto): Promise<Group> {
+  update(groupId: string, updateGroupDto: UpdateGroupDto): Promise<Group> {
     return this.groupModel
-      .findByIdAndUpdate(id, updateGroupDto, { new: true })
+      .findByIdAndUpdate(groupId, updateGroupDto, { new: true })
       .exec();
   }
 
-  delete(id: string) {
-    this.groupModel.findByIdAndDelete(id);
+  delete(groupId: string) {
+    this.groupModel.findByIdAndDelete(groupId);
   }
 
   deleteAll() {

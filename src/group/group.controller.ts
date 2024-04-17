@@ -40,22 +40,35 @@ export class GroupController {
     return this.groupService.findAll();
   }
 
-  @Get(':id')
+  @Get(':groupId')
+  @ApiParam({
+    name: 'groupId',
+    required: true,
+    description: '모임 ID',
+  })
   @ApiOperation({
     summary: '모임 상세 조회',
     description: '특정 모임을 조회합니다.',
   })
-  findOne(@Param('id') id: string) {
-    return this.groupService.findOne(id);
+  findOne(@Param('groupId') groupId: string) {
+    return this.groupService.findOne(groupId);
   }
 
-  @Patch(':id')
+  @Patch(':groupId')
+  @ApiParam({
+    name: 'groupId',
+    required: true,
+    description: '모임 ID',
+  })
   @ApiOperation({
     summary: '모임 수정',
     description: '특정 모임을 수정합니다.',
   })
-  update(@Param('id') id: string, @Body() updateGroupDto: UpdateGroupDto) {
-    return this.groupService.update(id, updateGroupDto);
+  update(
+    @Param('groupId') groupId: string,
+    @Body() updateGroupDto: UpdateGroupDto,
+  ) {
+    return this.groupService.update(groupId, updateGroupDto);
   }
 
   @Delete()
@@ -67,30 +80,35 @@ export class GroupController {
     return this.groupService.deleteAll();
   }
 
-  @Delete(':id')
+  @Delete(':groupId')
+  @ApiParam({
+    name: 'groupId',
+    required: true,
+    description: '모임 ID',
+  })
   @ApiOperation({
     summary: '모임 삭제',
     description: '특정 모임을 삭제합니다.',
   })
-  delete(@Param('id') id: string) {
-    return this.groupService.delete(id);
+  delete(@Param('groupId') groupId: string) {
+    return this.groupService.delete(groupId);
   }
 
+  @Post(':groupId/member/excel')
+  @ApiParam({
+    name: 'groupId',
+    required: true,
+    description: '모임 ID',
+  })
   @ApiOperation({
     summary: '모임 회원 엑셀 파일 업로드',
     description: '모임 회원 엑셀 파일을 업로드합니다.',
   })
-  @Post(':id/member/excel')
-  @ApiParam({
-    name: 'id',
-    required: true,
-    description: '모임 ID',
-  })
   @ApiFile('excel')
   async uploadMemberFile(
-    @Param('id') id: string,
+    @Param('groupId') groupId: string,
     @UploadedFile() excel: Express.Multer.File,
   ) {
-    return await this.groupService.convertExcelToJSON(id, excel);
+    return await this.groupService.convertExcelToJSON(groupId, excel);
   }
 }

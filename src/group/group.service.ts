@@ -17,26 +17,29 @@ export class GroupService {
     return (await this.groupRepository.findAll()) as Group[];
   }
 
-  async findOne(id: string): Promise<Group> {
-    return (await this.groupRepository.findOne(id)) as Group;
+  async findOne(groupId: string): Promise<Group> {
+    return (await this.groupRepository.findOne(groupId)) as Group;
   }
 
-  async update(id: string, updateGroupDto: UpdateGroupDto): Promise<Group> {
-    return (await this.groupRepository.update(id, {
+  async update(
+    groupId: string,
+    updateGroupDto: UpdateGroupDto,
+  ): Promise<Group> {
+    return (await this.groupRepository.update(groupId, {
       name: updateGroupDto.name,
       description: updateGroupDto.description,
     } as UpdateGroupDto)) as Group;
   }
 
-  async delete(id: string): Promise<void> {
-    return this.groupRepository.delete(id);
+  async delete(groupId: string): Promise<void> {
+    return this.groupRepository.delete(groupId);
   }
 
   async deleteAll(): Promise<void> {
     return this.groupRepository.deleteAll();
   }
 
-  async convertExcelToJSON(id: string, excel: Express.Multer.File) {
+  async convertExcelToJSON(groupId: string, excel: Express.Multer.File) {
     const workbook = new XLSX.Workbook();
     await workbook.xlsx.load(excel.buffer);
 
@@ -60,7 +63,7 @@ export class GroupService {
     });
 
     return {
-      id,
+      groupId,
       data,
     };
   }
