@@ -12,15 +12,18 @@ export class EventService {
     return `This action returns all event`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} event`;
+  findOne(groupId: string, eventId: string) {
+    return {
+      groupId,
+      eventId,
+    };
   }
 
-  update(id: number, updateEventDto: UpdateEventDto) {
-    return `This action updates a #${id} event` + updateEventDto;
+  update(eventId: number, updateEventDto: UpdateEventDto) {
+    return `This action updates a #${eventId} event` + updateEventDto;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} event`;
+  remove(eventId: number) {
+    return `This action removes a #${eventId} event`;
   }
 }
