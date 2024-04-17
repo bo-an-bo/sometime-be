@@ -18,14 +18,6 @@ export class CreateGroupDto {
   })
   readonly description: string;
 
-  @IsNotEmpty()
-  @ApiProperty({
-    required: true,
-    description: '모임장 사용자의 ObjectId',
-    example: '60f4b3b3b3b3b3b3b3b3b3b3',
-  })
-  readonly manager: string;
-
   @ApiProperty({
     required: false,
     description: '부모임장 사용자의 ObjectId와 권한',
