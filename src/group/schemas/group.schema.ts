@@ -14,4 +14,5 @@ export const GroupSchema = new Schema({
     default: [],
   },
   members: { type: [String], default: [] },
+  events: { type: [String], default: [] },
 });

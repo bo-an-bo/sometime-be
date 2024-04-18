@@ -10,4 +10,5 @@ export class Group {
     },
   ];
   members: string[];
+  events: string[];
 }
