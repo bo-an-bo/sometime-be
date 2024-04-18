@@ -30,44 +30,58 @@ describe('MemberController', () => {
 
   describe('create', () => {
     it('should return a member', async () => {
+      const groupId = '6616f02a10f10657a64d3283';
       const member = {
         name: 'Member 1',
-        phoneNumber: '010-1234-5678',
+        memberInfo: {
+          studentId: '20211806',
+          email: 'me@example.com',
+          phoneNumber: '010-1234-5678',
+        },
       };
 
-      const result: Member = await memberService.create(member);
+      const result: Member = await memberService.create(groupId, member);
 
       jest
         .spyOn(memberService, 'create')
         .mockImplementation(async () => result);
 
-      expect(await memberController.create(member)).toBe(result);
+      expect(await memberController.create(groupId, member)).toBe(result);
     });
   });
 
   describe('findAll', () => {
     it('should return an array of members', async () => {
+      const testGroupId = '6616f02a10f10657a64d3283';
       const testMembers = [
         {
           name: 'Member 1',
-          phoneNumber: '010-1234-5678',
+          memberInfo: {
+            studentId: '20211806',
+            email: 'me@example.com',
+            phoneNumber: '010-1234-5678',
+          },
         },
         {
           name: 'Member 2',
-          phoneNumber: '010-2345-6789',
+          memberInfo: {
+            studentId: '20211806',
+            email: 'me@example.com',
+            phoneNumber: '010-1234-5678',
+          },
         },
       ];
 
       const result: Member[] = [];
       for (const member of testMembers) {
-        result.push(await memberService.create(member));
+        result.push(await memberService.create(testGroupId, member));
       }
 
       jest
         .spyOn(memberService, 'findAll')
         .mockImplementation(async () => result);
 
-      expect(await memberController.findAll()).toBe(result);
+      expect(await memberController.findAll(testGroupId)).toBe(result);
     });
   });
 

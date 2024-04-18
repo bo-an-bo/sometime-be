@@ -1,5 +1,5 @@
 export class Member {
   id: string;
   name: string;
-  phoneNumber: string;
+  memberInfo: object;
 }

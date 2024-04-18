@@ -13,6 +13,16 @@ export class GroupService {
     return (await this.groupRepository.create(createGroupDto)) as Group;
   }
 
+  async addMember(groupId: string, memberId: string): Promise<Group> {
+    const group = (await this.groupRepository.findOne(groupId)) as Group;
+
+    if (!group.members.includes(memberId)) {
+      group.members.push(memberId);
+      await this.groupRepository.update(groupId, group);
+    }
+    return group;
+  }
+
   async findAll(): Promise<Group[]> {
     return (await this.groupRepository.findAll()) as Group[];
   }

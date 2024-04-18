@@ -9,5 +9,6 @@ import { GroupRepository } from './group.repository';
   imports: [DatabaseModule],
   controllers: [GroupController],
   providers: [GroupService, ...groupProvider, GroupRepository],
+  exports: [GroupService],
 })
 export class GroupModule {}

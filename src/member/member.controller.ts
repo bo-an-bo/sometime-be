@@ -27,20 +27,23 @@ export class MemberController {
 
   @Post()
   @ApiOperation({
-    summary: '회원 생성',
-    description: '회원을 생성합니다.',
+    summary: '그룹 회원 생성',
+    description: '그룹의 회원을 생성합니다.',
   })
-  create(@Body() createMemberDto: CreateMemberDto) {
-    return this.memberService.create(createMemberDto);
+  create(
+    @Param('groupId') groupId: string,
+    @Body() createMemberDto: CreateMemberDto,
+  ) {
+    return this.memberService.create(groupId, createMemberDto);
   }
 
   @Get()
   @ApiOperation({
-    summary: '모든 회원 조회',
-    description: '모든 회원을 조회합니다.',
+    summary: '그룹의 모든 회원 조회',
+    description: '그룹의 모든 회원을 조회합니다.',
   })
-  findAll() {
-    return this.memberService.findAll();
+  findAll(@Param('groupId') groupId: string) {
+    return this.memberService.findAll(groupId);
   }
 
   @Get(':memberId')
