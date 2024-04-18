@@ -34,7 +34,6 @@ describe('GroupController', () => {
       const group: CreateGroupDto = {
         name: 'Group 1',
         description: 'Group 1 description',
-        manager: 'user1',
         subManagers: null,
         members: ['user1', 'user2'],
       };
@@ -46,7 +45,6 @@ describe('GroupController', () => {
       expect(await groupController.create(group)).toBe(result);
       expect(result).toHaveProperty('name', group.name);
       expect(result).toHaveProperty('description', group.description);
-      expect(result).toHaveProperty('manager', group.manager);
       expect(result).toHaveProperty('subManagers', group.subManagers);
       expect(result).toHaveProperty('members', group.members);
     });

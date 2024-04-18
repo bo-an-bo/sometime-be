@@ -11,12 +11,17 @@ import {
 import { MemberService } from './member.service';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { HttpExceptionFilter } from '../http-exception.filter';
 
-@ApiTags('Member')
-@Controller('member')
 @UseFilters(HttpExceptionFilter)
+@ApiTags('Member')
+@Controller('group/:groupId/member')
+@ApiParam({
+  name: 'groupId',
+  required: true,
+  description: '모임 ID',
+})
 export class MemberController {
   constructor(private readonly memberService: MemberService) {}
 
@@ -38,22 +43,35 @@ export class MemberController {
     return this.memberService.findAll();
   }
 
-  @Get(':id')
+  @Get(':memberId')
   @ApiOperation({
     summary: '회원 상세 조회',
     description: '특정 회원을 조회합니다.',
   })
-  findOne(@Param('id') id: string) {
-    return this.memberService.findOne(id);
+  @ApiParam({
+    name: 'memberId',
+    required: true,
+    description: '모임 회원 ID',
+  })
+  findOne(@Param('memberId') memberId: string) {
+    return this.memberService.findOne(memberId);
   }
 
-  @Patch(':id')
+  @Patch(':memberId')
   @ApiOperation({
     summary: '회원 수정',
     description: '특정 회원을 수정합니다.',
   })
-  update(@Param('id') id: string, @Body() updateMemberDto: UpdateMemberDto) {
-    return this.memberService.update(id, updateMemberDto);
+  @ApiParam({
+    name: 'memberId',
+    required: true,
+    description: '모임 회원 ID',
+  })
+  update(
+    @Param('memberId') memberId: string,
+    @Body() updateMemberDto: UpdateMemberDto,
+  ) {
+    return this.memberService.update(memberId, updateMemberDto);
   }
 
   @Delete()
@@ -65,12 +83,17 @@ export class MemberController {
     return this.memberService.deleteAll();
   }
 
-  @Delete(':id')
+  @Delete(':memberId')
   @ApiOperation({
     summary: '회원 삭제',
     description: '특정 회원을 삭제합니다.',
   })
-  delete(@Param('id') id: string) {
-    return this.memberService.delete(id);
+  @ApiParam({
+    name: 'memberId',
+    required: true,
+    description: '모임 회원 ID',
+  })
+  delete(@Param('memberId') memberId: string) {
+    return this.memberService.delete(memberId);
   }
 }

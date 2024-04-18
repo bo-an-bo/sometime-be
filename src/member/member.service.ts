@@ -16,19 +16,22 @@ export class MemberService {
     return (await this.memberRepository.findAll()) as Member[];
   }
 
-  async findOne(id: string): Promise<Member> {
-    return (await this.memberRepository.findOne(id)) as Member;
+  async findOne(memberId: string): Promise<Member> {
+    return (await this.memberRepository.findOne(memberId)) as Member;
   }
 
-  async update(id: string, updateMemberDto: UpdateMemberDto): Promise<Member> {
-    return (await this.memberRepository.update(id, {
+  async update(
+    memberId: string,
+    updateMemberDto: UpdateMemberDto,
+  ): Promise<Member> {
+    return (await this.memberRepository.update(memberId, {
       name: updateMemberDto.name,
       phoneNumber: updateMemberDto.phoneNumber,
     } as UpdateMemberDto)) as Member;
   }
 
-  async delete(id: string): Promise<void> {
-    return this.memberRepository.delete(id);
+  async delete(memberId: string): Promise<void> {
+    return this.memberRepository.delete(memberId);
   }
 
   async deleteAll(): Promise<void> {
