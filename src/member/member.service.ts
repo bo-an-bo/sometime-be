@@ -14,10 +14,20 @@ export class MemberService {
 
   async create(
     groupId: string,
-    createMemberDto: CreateMemberDto,
-  ): Promise<Member> {
+    createMemberDtos: CreateMemberDto[],
+    // createMemberDto: CreateMemberDto,
+  ): Promise<Member[]> {
     // await this.groupService.addMember(groupId, member.id);
-    return (await this.memberRepository.create(createMemberDto)) as Member;
+    const newMember = [];
+    for (const createMemberDto of createMemberDtos) {
+      const member = await this.memberRepository.create(createMemberDto);
+      await this.groupService.addMember(groupId, member.id);
+      newMember.push(member);
+    }
+    return newMember;
+    // const member = await this.memberRepository.create(createMemberDto);
+    // await this.groupService.addMember(groupId, member.id);
+    // return member as Member;
   }
 
   async findAll(groupId: string): Promise<Member[]> {

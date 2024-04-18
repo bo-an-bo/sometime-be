@@ -11,7 +11,7 @@ import {
 import { MemberService } from './member.service';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
-import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { HttpExceptionFilter } from '../http-exception.filter';
 
 @UseFilters(HttpExceptionFilter)
@@ -30,9 +30,10 @@ export class MemberController {
     summary: '그룹 회원 생성',
     description: '그룹의 회원을 생성합니다.',
   })
+  @ApiBody({ type: [CreateMemberDto] })
   create(
     @Param('groupId') groupId: string,
-    @Body() createMemberDto: CreateMemberDto,
+    @Body() createMemberDto: CreateMemberDto[],
   ) {
     return this.memberService.create(groupId, createMemberDto);
   }
