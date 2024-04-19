@@ -29,21 +29,33 @@ export class MemberController {
 
   @Post()
   @ApiOperation({
-    summary: '그룹 회원 생성',
-    description: '그룹의 회원들을 생성합니다.',
+    summary: '모임 회원 생성',
+    description: '모임의 회원을 생성합니다.',
   })
-  @ApiBody({ type: [CreateMemberDto] })
   create(
     @Param('groupId') groupId: string,
-    @Body() createMemberDto: CreateMemberDto[],
+    @Body() createMemberDto: CreateMemberDto,
   ) {
     return this.memberService.create(groupId, createMemberDto);
   }
 
+  @Post('/list')
+  @ApiOperation({
+    summary: '모임 회원들 생성',
+    description: '모임의 회원들을 생성합니다.',
+  })
+  @ApiBody({ type: [CreateMemberDto] })
+  createGroupMembers(
+    @Param('groupId') groupId: string,
+    @Body() createMemberDto: CreateMemberDto[],
+  ) {
+    return this.memberService.createGroupMembers(groupId, createMemberDto);
+  }
+
   @Get()
   @ApiOperation({
-    summary: '그룹의 모든 회원 조회',
-    description: '그룹의 모든 회원을 조회합니다.',
+    summary: '모임 모든 회원 조회',
+    description: '모임의 모든 회원을 조회합니다.',
   })
   findAll(@Param('groupId') groupId: string) {
     return this.memberService.findAll(groupId);
@@ -59,8 +71,11 @@ export class MemberController {
     required: true,
     description: '모임 회원 ID',
   })
-  findOne(@Param('memberId') memberId: string) {
-    return this.memberService.findOne(memberId);
+  findOne(
+    @Param('groupId') groupId: string,
+    @Param('memberId') memberId: string,
+  ) {
+    return this.memberService.findOne(groupId, memberId);
   }
 
   @Patch(':memberId')
@@ -80,19 +95,22 @@ export class MemberController {
     return this.memberService.update(memberId, updateMemberDto);
   }
 
-  @Delete()
-  @ApiOperation({
-    summary: '그룹 회원 모두 삭제',
-    description: '그룹의 모든 회원을 삭제합니다.',
-  })
-  deleteAllGroupMember(@Param('groupId') groupId: string) {
-    return this.memberService.deleteAllGroupMember(groupId);
-  }
-
   @Delete(':memberId')
   @ApiOperation({
-    summary: '그룹 회원 삭제',
-    description: '그룹의 특정 회원들을 삭제합니다.',
+    summary: '모임 회원 삭제',
+    description: '모임의 특정 회원을 삭제합니다.',
+  })
+  delete(
+    @Param('groupId') groupId: string,
+    @Param('memberId') memberId: string,
+  ) {
+    return this.memberService.delete(groupId, memberId);
+  }
+
+  @Delete('/list')
+  @ApiOperation({
+    summary: '모임 회원들 삭제',
+    description: '모임의 특정 회원들을 삭제합니다.',
   })
   @ApiBody({
     schema: {
@@ -103,11 +121,20 @@ export class MemberController {
       },
     },
   })
-  deleteGroupMember(
+  deleteGroupMembers(
     @Param('groupId') groupId: string,
     @Body() members: string[],
   ) {
-    return this.memberService.deleteGroupMember(groupId, members);
+    return this.memberService.deleteGroupMembers(groupId, members);
+  }
+
+  @Delete()
+  @ApiOperation({
+    summary: '모임 모든 회원 삭제',
+    description: '모임의 모든 회원을 삭제합니다.',
+  })
+  deleteAllGroupMember(@Param('groupId') groupId: string) {
+    return this.memberService.deleteAllGroupMembers(groupId);
   }
 
   @Post('/upload/excel')

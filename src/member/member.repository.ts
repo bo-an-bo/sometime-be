@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Member } from './interfaces/member.interface';
-import mongoose, { Model } from 'mongoose';
+import { Model } from 'mongoose';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 
@@ -16,8 +16,6 @@ export class MemberRepository {
   }
 
   findAll(members: string[]): Promise<Member[]> {
-    // example 로 사용한 값이 실제 id 형태(object)가 아니라 임시 처리
-    // members.splice(members.indexOf('60f4b3b3b3b3b3b3b3b3b3'), 1);
     return this.memberModel.find({ _id: { $in: members } }).exec();
   }
 
@@ -31,10 +29,8 @@ export class MemberRepository {
       .exec();
   }
 
-  deleteMember(memberId: string) {
-    if (mongoose.Types.ObjectId.isValid(memberId)) {
-      this.memberModel.findByIdAndDelete(memberId).exec();
-    }
+  delete(memberId: string[]) {
+    this.memberModel.deleteMany({ _id: { $in: memberId } }).exec();
   }
 
   deleteAll() {

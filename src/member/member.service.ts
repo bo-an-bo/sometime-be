@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { MemberRepository } from './member.repository';
 import { Member } from './entities/member.entity';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 import { GroupService } from '../group/group.service';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class MemberService {
@@ -14,14 +15,29 @@ export class MemberService {
 
   async create(
     groupId: string,
+    createMemberDto: CreateMemberDto,
+  ): Promise<Member> {
+    const member = (await this.memberRepository.create(
+      createMemberDto,
+    )) as Member;
+    await this.groupService.addMember(groupId, [member.id]);
+    return member as Member;
+  }
+
+  async createGroupMembers(
+    groupId: string,
     createMembersDto: CreateMemberDto[],
   ): Promise<Member[]> {
     const newMember: Member[] = [];
     for (const createMemberDto of createMembersDto) {
       const member = await this.memberRepository.create(createMemberDto);
-      await this.groupService.addMember(groupId, member.id);
       newMember.push(member as Member);
     }
+    await this.groupService.addMember(
+      groupId,
+      newMember.map((member) => member.id),
+    );
+
     return newMember;
   }
 
@@ -31,7 +47,11 @@ export class MemberService {
     return (await this.memberRepository.findAll(group.members)) as Member[];
   }
 
-  async findOne(memberId: string): Promise<Member> {
+  async findOne(groupId: string, memberId: string): Promise<Member> {
+    const group = await this.groupService.findOne(groupId);
+    if (!group) return undefined;
+    if (!group.members.includes(memberId)) return undefined;
+
     return (await this.memberRepository.findOne(memberId)) as Member;
   }
 
@@ -45,20 +65,35 @@ export class MemberService {
     } as UpdateMemberDto)) as Member;
   }
 
-  async deleteGroupMember(groupId: string, memberIds: string[]): Promise<void> {
-    for (const memberId of memberIds) {
-      await this.groupService.deleteMember(groupId, memberId);
-      this.memberRepository.deleteMember(memberId);
-    }
+  validateMemberIds(memberIds: string[]) {
+    return memberIds.every(mongoose.Types.ObjectId.isValid);
   }
 
-  async deleteAllGroupMember(groupId: string): Promise<void> {
-    const deleteMembers = await this.findAll(groupId);
-    for (const member of deleteMembers) {
-      this.memberRepository.deleteMember(member.id);
-    }
-    // group.members 초기화
-    await this.groupService.deleteAllMember(groupId);
+  async delete(groupId: string, memberId: string): Promise<void> {
+    if (!this.validateMemberIds([memberId])) throw new NotFoundException();
+
+    this.memberRepository.delete([memberId]);
+    await this.groupService.deleteMembers(groupId, [memberId]);
+  }
+
+  async deleteGroupMembers(
+    groupId: string,
+    memberIds: string[],
+  ): Promise<void> {
+    if (!this.validateMemberIds(memberIds)) throw new NotFoundException();
+
+    this.memberRepository.delete(memberIds);
+    await this.groupService.deleteMembers(groupId, memberIds);
+  }
+
+  async deleteAllGroupMembers(groupId: string): Promise<void> {
+    const group = await this.groupService.findOne(groupId);
+    const memberIds = group.members;
+
+    if (!this.validateMemberIds(memberIds)) throw new NotFoundException();
+
+    this.memberRepository.delete(memberIds);
+    await this.groupService.deleteMembers(groupId, memberIds);
   }
 
   async uploadMemberFile(
@@ -68,8 +103,8 @@ export class MemberService {
     const members: Member[] =
       await this.groupService.convertMemberExcelToJSON(excel);
     //멤버 삭제
-    await this.deleteAllGroupMember(groupId);
+    await this.deleteAllGroupMembers(groupId);
     //group에 멤버 추가
-    return await this.create(groupId, members);
+    return await this.createGroupMembers(groupId, members);
   }
 }

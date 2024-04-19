@@ -13,10 +13,11 @@ export class GroupService {
     return (await this.groupRepository.create(createGroupDto)) as Group;
   }
 
-  async addMember(groupId: string, memberId: string): Promise<Group> {
+  async addMember(groupId: string, memberIds: string[]): Promise<Group> {
     const group = (await this.groupRepository.findOne(groupId)) as Group;
-
-    group.members.push(memberId);
+    for (const memberId of memberIds) {
+      group.members.push(memberId);
+    }
     await this.groupRepository.update(groupId, group);
     return group;
   }
@@ -43,17 +44,12 @@ export class GroupService {
     return this.groupRepository.delete(groupId);
   }
 
-  async deleteMember(groupId: string, memberId: string): Promise<void> {
+  async deleteMembers(groupId: string, memberIds: string[]): Promise<void> {
     const group = (await this.groupRepository.findOne(groupId)) as Group;
-    if (group.members.includes(memberId)) {
-      group.members.splice(group.members.indexOf(memberId), 1);
-    }
-    await this.groupRepository.update(groupId, group);
-  }
+    group.members = group.members.filter(
+      (member) => !memberIds.includes(member),
+    );
 
-  async deleteAllMember(groupId: string): Promise<void> {
-    const group = (await this.groupRepository.findOne(groupId)) as Group;
-    group.members = [];
     await this.groupRepository.update(groupId, group);
   }
 
