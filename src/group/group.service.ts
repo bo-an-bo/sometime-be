@@ -44,26 +44,13 @@ export class GroupService {
     return this.groupRepository.delete(groupId);
   }
 
-  async deleteMember(groupId: string, memberId: string): Promise<void> {
-    const group = (await this.groupRepository.findOne(groupId)) as Group;
-    if (group.members.includes(memberId)) {
-      group.members = group.members.filter((member) => member !== memberId);
-    }
-    await this.groupRepository.update(groupId, group);
-  }
-
   async deleteMembers(groupId: string, memberIds: string[]): Promise<void> {
     const group = (await this.groupRepository.findOne(groupId)) as Group;
     const groupMembers = group.members;
 
-    if (
-      Array.isArray(memberIds) &&
-      memberIds.every((item) => typeof item === 'string')
-    ) {
-      group.members = groupMembers.filter(
-        (member) => !memberIds.includes(member),
-      );
-    }
+    group.members = groupMembers.filter(
+      (member) => !memberIds.find((id) => id === member),
+    );
 
     await this.groupRepository.update(groupId, group);
   }

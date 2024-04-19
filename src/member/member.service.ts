@@ -70,11 +70,10 @@ export class MemberService {
   }
 
   async delete(groupId: string, memberId: string): Promise<void> {
-    const memberIds: string[] = [memberId];
-    if (!this.validateMemberIds(memberIds)) throw new NotFoundException();
+    if (!this.validateMemberIds([memberId])) throw new NotFoundException();
 
-    this.memberRepository.delete(memberIds);
-    await this.groupService.deleteMember(groupId, memberId);
+    this.memberRepository.delete([memberId]);
+    await this.groupService.deleteMembers(groupId, [memberId]);
   }
 
   async deleteGroupMembers(
