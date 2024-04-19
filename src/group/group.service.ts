@@ -46,12 +46,12 @@ export class GroupService {
 
   async deleteMembers(groupId: string, memberIds: string[]): Promise<void> {
     const group = (await this.groupRepository.findOne(groupId)) as Group;
-    if (!Array.isArray(memberIds)) memberIds = [memberIds];
 
-    group.members = group.members.filter(
-      (member) => !memberIds.includes(member),
-    );
-
+    if (Array.isArray(memberIds)) {
+      group.members = group.members.filter(
+        (member) => !memberIds.includes(member),
+      );
+    }
     await this.groupRepository.update(groupId, group);
   }
 
