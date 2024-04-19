@@ -48,9 +48,14 @@ export class GroupService {
     const group = (await this.groupRepository.findOne(groupId)) as Group;
     const groupMembers = group.members;
 
-    group.members = groupMembers.filter(
-      (member) => !(memberIds as string[]).includes(member),
-    );
+    if (
+      Array.isArray(memberIds) &&
+      memberIds.every((item) => typeof item === 'string')
+    ) {
+      group.members = groupMembers.filter(
+        (member) => !memberIds.includes(member),
+      );
+    }
 
     await this.groupRepository.update(groupId, group);
   }
