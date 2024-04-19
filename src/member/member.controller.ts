@@ -85,8 +85,8 @@ export class MemberController {
     summary: '그룹 회원 모두 삭제',
     description: '그룹의 모든 회원을 삭제합니다.',
   })
-  deleteAll(@Param('groupId') groupId: string) {
-    return this.memberService.deleteAll(groupId);
+  deleteAllGroupMember(@Param('groupId') groupId: string) {
+    return this.memberService.deleteAllGroupMember(groupId);
   }
 
   @Delete(':memberId')
@@ -103,14 +103,17 @@ export class MemberController {
       },
     },
   })
-  delete(@Param('groupId') groupId: string, @Body() members: string[]) {
-    return this.memberService.delete(groupId, members);
+  deleteGroupMember(
+    @Param('groupId') groupId: string,
+    @Body() members: string[],
+  ) {
+    return this.memberService.deleteGroupMember(groupId, members);
   }
 
   @Post('/upload/excel')
   @ApiOperation({
     summary: '회원 명단 업로드',
-    description: '회원 명단을 다시 업로드합니다.',
+    description: '회원 명단을 재구성합니다.',
   })
   @ApiFile('excel')
   async uploadMemberFIle(

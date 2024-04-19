@@ -23,9 +23,6 @@ export class MemberService {
       newMember.push(member as Member);
     }
     return newMember;
-    // const member = await this.memberRepository.create(createMemberDto);
-    // await this.groupService.addMember(groupId, member.id);
-    // return member as Member;
   }
 
   async findAll(groupId: string): Promise<Member[]> {
@@ -48,17 +45,17 @@ export class MemberService {
     } as UpdateMemberDto)) as Member;
   }
 
-  async delete(groupId: string, memberIds: string[]): Promise<void> {
+  async deleteGroupMember(groupId: string, memberIds: string[]): Promise<void> {
     for (const memberId of memberIds) {
       await this.groupService.deleteMember(groupId, memberId);
-      this.memberRepository.delete(memberId);
+      this.memberRepository.deleteMember(memberId);
     }
   }
 
-  async deleteAll(groupId: string): Promise<void> {
+  async deleteAllGroupMember(groupId: string): Promise<void> {
     const deleteMembers = await this.findAll(groupId);
     for (const member of deleteMembers) {
-      this.memberRepository.delete(member.id);
+      this.memberRepository.deleteMember(member.id);
     }
     // group.members 초기화
     await this.groupService.deleteAllMember(groupId);
@@ -71,12 +68,7 @@ export class MemberService {
     const members: Member[] =
       await this.groupService.convertMemberExcelToJSON(excel);
     //멤버 삭제
-    const deleteMembers = await this.findAll(groupId);
-    for (const member of deleteMembers) {
-      this.memberRepository.delete(member.id);
-    }
-    //group 멤버 초기화
-    await this.groupService.deleteAllMember(groupId);
+    await this.deleteAllGroupMember(groupId);
     //group에 멤버 추가
     return await this.create(groupId, members);
   }

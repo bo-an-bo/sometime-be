@@ -15,6 +15,7 @@ export class GroupService {
 
   async addMember(groupId: string, memberId: string): Promise<Group> {
     const group = (await this.groupRepository.findOne(groupId)) as Group;
+
     group.members.push(memberId);
     await this.groupRepository.update(groupId, group);
     return group;
