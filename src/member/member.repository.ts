@@ -15,8 +15,8 @@ export class MemberRepository {
     return this.memberModel.create(createMemberDto);
   }
 
-  findAll(): Promise<Member[]> {
-    return this.memberModel.find().exec();
+  findAll(members: string[]): Promise<Member[]> {
+    return this.memberModel.find({ _id: { $in: members } }).exec();
   }
 
   findOne(memberId: string): Promise<Member> {
@@ -29,8 +29,8 @@ export class MemberRepository {
       .exec();
   }
 
-  delete(memberId: string) {
-    this.memberModel.findByIdAndDelete(memberId);
+  delete(memberId: string[]) {
+    this.memberModel.deleteMany({ _id: { $in: memberId } }).exec();
   }
 
   deleteAll() {

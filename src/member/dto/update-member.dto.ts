@@ -10,7 +10,11 @@ export class UpdateMemberDto extends PartialType(CreateMemberDto) {
 
   @ApiProperty({
     description: '회원 연락처',
-    example: '010-1234-5678',
+    example: {
+      studentId: '20211806',
+      email: 'me@example.com',
+      phoneNumber: '010-1234-5678',
+    },
   })
-  readonly phoneNumber: string;
+  readonly memberInfo: object;
 }

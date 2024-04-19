@@ -13,6 +13,15 @@ export class GroupService {
     return (await this.groupRepository.create(createGroupDto)) as Group;
   }
 
+  async addMember(groupId: string, memberIds: string[]): Promise<Group> {
+    const group = (await this.groupRepository.findOne(groupId)) as Group;
+    for (const memberId of memberIds) {
+      group.members.push(memberId);
+    }
+    await this.groupRepository.update(groupId, group);
+    return group;
+  }
+
   async findAll(): Promise<Group[]> {
     return (await this.groupRepository.findAll()) as Group[];
   }
@@ -33,6 +42,17 @@ export class GroupService {
 
   async delete(groupId: string): Promise<void> {
     return this.groupRepository.delete(groupId);
+  }
+
+  async deleteMembers(groupId: string, memberIds: string[]): Promise<void> {
+    const group = (await this.groupRepository.findOne(groupId)) as Group;
+    const groupMembers = group.members;
+
+    group.members = groupMembers.filter(
+      (member) => !memberIds.find((id) => id === member),
+    );
+
+    await this.groupRepository.update(groupId, group);
   }
 
   async deleteAll(): Promise<void> {
@@ -66,5 +86,37 @@ export class GroupService {
       groupId,
       data,
     };
+  }
+
+  async convertMemberExcelToJSON(excel: Express.Multer.File) {
+    const workbook = new XLSX.Workbook();
+    await workbook.xlsx.load(excel.buffer);
+
+    const worksheet = workbook.getWorksheet(1);
+
+    const columns = [];
+    worksheet.getRow(1).eachCell((cell) => {
+      columns.push(cell.value);
+    });
+
+    const data = [];
+    worksheet.eachRow((row, rowNumber) => {
+      if (rowNumber !== 1) {
+        const rowObject = {};
+        const memberInfo = {};
+        row.eachCell((cell, colNumber) => {
+          const col = columns[colNumber - 1];
+          if (col == 'name' || col == '이름') {
+            rowObject['name'] = String(cell.value).trim();
+          } else {
+            memberInfo[col] = String(cell.value).trim();
+          }
+        });
+        rowObject['memberInfo'] = memberInfo;
+        data.push(rowObject);
+      }
+    });
+
+    return data;
   }
 }

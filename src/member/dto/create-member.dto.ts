@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateMemberDto {
   @IsNotEmpty()
@@ -10,10 +10,13 @@ export class CreateMemberDto {
   })
   readonly name: string;
 
-  @IsPhoneNumber('KR')
   @ApiProperty({
-    description: '회원 연락처',
-    example: '010-1234-5678',
+    description: '회원 정보',
+    example: {
+      studentId: '20211806',
+      email: 'me@example.com',
+      phoneNumber: '010-1234-5678',
+    },
   })
-  readonly phoneNumber: string;
+  readonly memberInfo: object;
 }
