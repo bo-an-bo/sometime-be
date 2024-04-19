@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Member } from './interfaces/member.interface';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 
@@ -32,8 +32,9 @@ export class MemberRepository {
   }
 
   deleteMember(memberId: string) {
-    console.log('delete', memberId);
-    this.memberModel.findByIdAndDelete(memberId).exec();
+    if (mongoose.Types.ObjectId.isValid(memberId)) {
+      this.memberModel.findByIdAndDelete(memberId).exec();
+    }
   }
 
   deleteAll() {
