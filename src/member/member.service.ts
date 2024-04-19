@@ -14,15 +14,13 @@ export class MemberService {
 
   async create(
     groupId: string,
-    createMemberDtos: CreateMemberDto[],
-    // createMemberDto: CreateMemberDto,
+    createMembersDto: CreateMemberDto[],
   ): Promise<Member[]> {
-    // await this.groupService.addMember(groupId, member.id);
-    const newMember = [];
-    for (const createMemberDto of createMemberDtos) {
+    const newMember: Member[] = [];
+    for (const createMemberDto of createMembersDto) {
       const member = await this.memberRepository.create(createMemberDto);
       await this.groupService.addMember(groupId, member.id);
-      newMember.push(member);
+      newMember.push(member as Member);
     }
     return newMember;
     // const member = await this.memberRepository.create(createMemberDto);
@@ -33,6 +31,7 @@ export class MemberService {
   async findAll(groupId: string): Promise<Member[]> {
     //lookup 써서 join하려고 했는데 model처리가 어려워서 임시로..디비 두번 접근
     const group = await this.groupService.findOne(groupId);
+    console.log(group.members);
     return (await this.memberRepository.findAll(group.members)) as Member[];
   }
 
@@ -50,11 +49,18 @@ export class MemberService {
     } as UpdateMemberDto)) as Member;
   }
 
-  async delete(memberId: string): Promise<void> {
+  async delete(groupId: string, memberId: string): Promise<void> {
+    // group.members에서 memberId 제외
+    await this.groupService.deleteMember(groupId, memberId);
     return this.memberRepository.delete(memberId);
   }
 
-  async deleteAll(): Promise<void> {
-    return this.memberRepository.deleteAll();
+  async deleteAll(groupId: string): Promise<void> {
+    // group.members 초기화
+    await this.groupService.deleteAllMember(groupId);
+    const deleteMembers = await this.findAll(groupId);
+    for (const member of deleteMembers) {
+      this.memberRepository.delete(member.id);
+    }
   }
 }

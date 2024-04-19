@@ -16,8 +16,8 @@ export class MemberRepository {
   }
 
   findAll(members: string[]): Promise<Member[]> {
-    // example로 사용한 값이 실제 id 형태(object)가 아니라 임시 처리
-    members.splice(members.indexOf('60f4b3b3b3b3b3b3b3b3b3'), 1);
+    // // example로 사용한 값이 실제 id 형태(object)가 아니라 임시 처리
+    // members.splice(members.indexOf('60f4b3b3b3b3b3b3b3b3b3'), 1);
 
     return this.memberModel.find({ _id: { $in: members } }).exec();
   }
@@ -33,7 +33,8 @@ export class MemberRepository {
   }
 
   delete(memberId: string) {
-    this.memberModel.findByIdAndDelete(memberId);
+    console.log('delete', memberId);
+    this.memberModel.findByIdAndDelete(memberId).exec();
   }
 
   deleteAll() {

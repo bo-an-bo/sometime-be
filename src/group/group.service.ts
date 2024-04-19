@@ -15,11 +15,8 @@ export class GroupService {
 
   async addMember(groupId: string, memberId: string): Promise<Group> {
     const group = (await this.groupRepository.findOne(groupId)) as Group;
-
-    if (!group.members.includes(memberId)) {
-      group.members.push(memberId);
-      await this.groupRepository.update(groupId, group);
-    }
+    group.members.push(memberId);
+    await this.groupRepository.update(groupId, group);
     return group;
   }
 
@@ -43,6 +40,20 @@ export class GroupService {
 
   async delete(groupId: string): Promise<void> {
     return this.groupRepository.delete(groupId);
+  }
+
+  async deleteMember(groupId: string, memberId: string): Promise<void> {
+    const group = (await this.groupRepository.findOne(groupId)) as Group;
+    if (group.members.includes(memberId)) {
+      group.members.splice(group.members.indexOf(memberId), 1);
+    }
+    await this.groupRepository.update(groupId, group);
+  }
+
+  async deleteAllMember(groupId: string): Promise<void> {
+    const group = (await this.groupRepository.findOne(groupId)) as Group;
+    group.members = [];
+    await this.groupRepository.update(groupId, group);
   }
 
   async deleteAll(): Promise<void> {

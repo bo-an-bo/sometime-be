@@ -80,24 +80,27 @@ export class MemberController {
 
   @Delete()
   @ApiOperation({
-    summary: '모든 회원 삭제',
-    description: '모든 회원을 삭제합니다.',
+    summary: '그룹 회원 모두 삭제',
+    description: '그룹의 모든 회원을 삭제합니다.',
   })
-  deleteAll() {
-    return this.memberService.deleteAll();
+  deleteAll(@Param('groupId') groupId: string) {
+    return this.memberService.deleteAll(groupId);
   }
 
   @Delete(':memberId')
   @ApiOperation({
-    summary: '회원 삭제',
-    description: '특정 회원을 삭제합니다.',
+    summary: '그룹 회원 삭제',
+    description: '그룹의 특정 회원을 삭제합니다.',
   })
   @ApiParam({
     name: 'memberId',
     required: true,
     description: '모임 회원 ID',
   })
-  delete(@Param('memberId') memberId: string) {
-    return this.memberService.delete(memberId);
+  delete(
+    @Param('groupId') groupId: string,
+    @Param('memberId') memberId: string,
+  ) {
+    return this.memberService.delete(groupId, memberId);
   }
 }
