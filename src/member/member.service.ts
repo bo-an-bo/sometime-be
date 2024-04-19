@@ -74,7 +74,7 @@ export class MemberService {
     if (!this.validateMemberIds(memberIds)) throw new NotFoundException();
 
     this.memberRepository.delete(memberIds);
-    await this.groupService.deleteMembers(groupId, memberIds);
+    await this.groupService.deleteMember(groupId, memberId);
   }
 
   async deleteGroupMembers(
