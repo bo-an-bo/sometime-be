@@ -49,10 +49,11 @@ export class MemberService {
     } as UpdateMemberDto)) as Member;
   }
 
-  async delete(groupId: string, memberId: string): Promise<void> {
-    // group.members에서 memberId 제외
-    await this.groupService.deleteMember(groupId, memberId);
-    return this.memberRepository.delete(memberId);
+  async delete(groupId: string, memberIds: string[]): Promise<void> {
+    for (const memberId of memberIds) {
+      await this.groupService.deleteMember(groupId, memberId);
+      this.memberRepository.delete(memberId);
+    }
   }
 
   async deleteAll(groupId: string): Promise<void> {

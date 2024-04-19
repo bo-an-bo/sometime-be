@@ -28,7 +28,7 @@ export class MemberController {
   @Post()
   @ApiOperation({
     summary: '그룹 회원 생성',
-    description: '그룹의 회원을 생성합니다.',
+    description: '그룹의 회원들을 생성합니다.',
   })
   @ApiBody({ type: [CreateMemberDto] })
   create(
@@ -90,17 +90,18 @@ export class MemberController {
   @Delete(':memberId')
   @ApiOperation({
     summary: '그룹 회원 삭제',
-    description: '그룹의 특정 회원을 삭제합니다.',
+    description: '그룹의 특정 회원들을 삭제합니다.',
   })
-  @ApiParam({
-    name: 'memberId',
-    required: true,
-    description: '모임 회원 ID',
+  @ApiBody({
+    schema: {
+      type: 'array',
+      items: {
+        type: 'string',
+        example: 'memberId',
+      },
+    },
   })
-  delete(
-    @Param('groupId') groupId: string,
-    @Param('memberId') memberId: string,
-  ) {
-    return this.memberService.delete(groupId, memberId);
+  delete(@Param('groupId') groupId: string, @Body() members: string[]) {
+    return this.memberService.delete(groupId, members);
   }
 }
