@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
   UseFilters,
 } from '@nestjs/common';
 import { MemberService } from './member.service';
@@ -13,6 +14,7 @@ import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { HttpExceptionFilter } from '../http-exception.filter';
+import { ApiFile } from '../api-file.decorator';
 
 @UseFilters(HttpExceptionFilter)
 @ApiTags('Member')
@@ -103,5 +105,19 @@ export class MemberController {
   })
   delete(@Param('groupId') groupId: string, @Body() members: string[]) {
     return this.memberService.delete(groupId, members);
+  }
+
+  @Post('/upload/excel')
+  @ApiOperation({
+    summary: '회원 명단 업로드',
+    description: '회원 명단을 다시 업로드합니다.',
+  })
+  @ApiFile('excel')
+  async uploadMemberFIle(
+    @Param('groupId') groupId: string,
+    @UploadedFile() excel: Express.Multer.File,
+  ) {
+    console.log(groupId);
+    return await this.memberService.uploadMemberFile(groupId, excel);
   }
 }

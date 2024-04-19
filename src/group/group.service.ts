@@ -88,4 +88,36 @@ export class GroupService {
       data,
     };
   }
+
+  async convertMemberExcelToJSON(excel: Express.Multer.File) {
+    const workbook = new XLSX.Workbook();
+    await workbook.xlsx.load(excel.buffer);
+
+    const worksheet = workbook.getWorksheet(1);
+
+    const columns = [];
+    worksheet.getRow(1).eachCell((cell) => {
+      columns.push(cell.value);
+    });
+
+    const data = [];
+    worksheet.eachRow((row, rowNumber) => {
+      if (rowNumber !== 1) {
+        const rowObject = {};
+        const memberInfo = {};
+        row.eachCell((cell, colNumber) => {
+          const col = columns[colNumber - 1];
+          if (col == 'name' || col == '이름') {
+            rowObject['name'] = String(cell.value).trim();
+          } else {
+            memberInfo[col] = String(cell.value).trim();
+          }
+        });
+        rowObject['memberInfo'] = memberInfo;
+        data.push(rowObject);
+      }
+    });
+
+    return data;
+  }
 }

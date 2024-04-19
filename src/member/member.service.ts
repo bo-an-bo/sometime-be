@@ -57,11 +57,28 @@ export class MemberService {
   }
 
   async deleteAll(groupId: string): Promise<void> {
-    // group.members 초기화
-    await this.groupService.deleteAllMember(groupId);
     const deleteMembers = await this.findAll(groupId);
     for (const member of deleteMembers) {
       this.memberRepository.delete(member.id);
     }
+    // group.members 초기화
+    await this.groupService.deleteAllMember(groupId);
+  }
+
+  async uploadMemberFile(
+    groupId: string,
+    excel: Express.Multer.File,
+  ): Promise<Member[]> {
+    const members: Member[] =
+      await this.groupService.convertMemberExcelToJSON(excel);
+    //멤버 삭제
+    const deleteMembers = await this.findAll(groupId);
+    for (const member of deleteMembers) {
+      this.memberRepository.delete(member.id);
+    }
+    //group 멤버 초기화
+    await this.groupService.deleteAllMember(groupId);
+    //group에 멤버 추가
+    return await this.create(groupId, members);
   }
 }
