@@ -100,6 +100,11 @@ export class MemberController {
     summary: '모임 회원 삭제',
     description: '모임의 특정 회원을 삭제합니다.',
   })
+  @ApiParam({
+    name: 'memberId',
+    required: true,
+    description: '모임 회원 ID',
+  })
   delete(
     @Param('groupId') groupId: string,
     @Param('memberId') memberId: string,
@@ -133,7 +138,7 @@ export class MemberController {
     summary: '모임 모든 회원 삭제',
     description: '모임의 모든 회원을 삭제합니다.',
   })
-  deleteAllGroupMember(@Param('groupId') groupId: string) {
+  deleteAllGroupMembers(@Param('groupId') groupId: string) {
     return this.memberService.deleteAllGroupMembers(groupId);
   }
 
