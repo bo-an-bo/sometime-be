@@ -117,7 +117,6 @@ export class MemberController {
     @Param('groupId') groupId: string,
     @UploadedFile() excel: Express.Multer.File,
   ) {
-    console.log(groupId);
     return await this.memberService.uploadMemberFile(groupId, excel);
   }
 }
