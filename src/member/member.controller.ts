@@ -123,9 +123,9 @@ export class MemberController {
   })
   deleteGroupMembers(
     @Param('groupId') groupId: string,
-    @Body() members: string[],
+    @Body() memberIds: string[],
   ) {
-    return this.memberService.deleteGroupMembers(groupId, members);
+    return this.memberService.deleteGroupMembers(groupId, memberIds);
   }
 
   @Delete()

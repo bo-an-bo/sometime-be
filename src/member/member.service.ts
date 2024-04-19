@@ -49,8 +49,8 @@ export class MemberService {
 
   async findOne(groupId: string, memberId: string): Promise<Member> {
     const group = await this.groupService.findOne(groupId);
-    if (!group) return undefined;
-    if (!group.members.includes(memberId)) return undefined;
+    if (!group) throw new NotFoundException();
+    if (!group.members.includes(memberId)) throw new NotFoundException();
 
     return (await this.memberRepository.findOne(memberId)) as Member;
   }
