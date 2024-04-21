@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
-import { ApiFile } from '../api-file.decorator';
-import { HttpExceptionFilter } from '../http-exception.filter';
+import { ApiFile } from '../common/decorators/api-file.decorator';
+import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 import { MemberService } from './member.service';

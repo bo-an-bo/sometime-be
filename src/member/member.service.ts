@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import mongoose from 'mongoose';
 
-import { ExcelService } from '../common/excel/excel.service';
+import { ExcelService } from '../excel/excel.service';
 import { GroupService } from '../group/group.service';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';

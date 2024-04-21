@@ -3,11 +3,11 @@ import { NestFactory } from '@nestjs/core';
 import * as process from 'process';
 
 import { AppModule } from './app.module';
-import { configSwagger } from './config.swagger';
+import { swaggerConfig } from './common/configs/swagger.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  configSwagger(app);
+  swaggerConfig(app);
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
   await app.listen(process.env.SERVER_PORT);
