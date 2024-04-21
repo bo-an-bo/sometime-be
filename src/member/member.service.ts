@@ -1,16 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { MemberRepository } from './member.repository';
-import { Member } from './entities/member.entity';
+import mongoose from 'mongoose';
+
+import { ExcelService } from '../common/excel/excel.service';
+import { GroupService } from '../group/group.service';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
-import { GroupService } from '../group/group.service';
-import mongoose from 'mongoose';
+import { Member } from './entities/member.entity';
+import { MemberRepository } from './member.repository';
 
 @Injectable()
 export class MemberService {
   constructor(
     private readonly memberRepository: MemberRepository,
     private readonly groupService: GroupService,
+    private readonly excelService: ExcelService,
   ) {}
 
   async create(
@@ -107,7 +110,7 @@ export class MemberService {
     excel: Express.Multer.File,
   ): Promise<Member[]> {
     const members: Member[] =
-      await this.groupService.convertMemberExcelToJSON(excel);
+      await this.excelService.convertMemberExcelToJSON(excel);
     //멤버 삭제
     await this.deleteAllGroupMembers(groupId);
     //group에 멤버 추가

@@ -1,14 +1,15 @@
-import { GroupController } from './group.controller';
-import { GroupService } from './group.service';
 import { Test, TestingModule } from '@nestjs/testing';
-import { DatabaseModule } from '../database/database.module';
-import { groupProvider } from './group.provider';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import * as process from 'process';
-import { Group } from './entities/group.entity';
 import mongoose from 'mongoose';
+import * as process from 'process';
+
+import { DatabaseModule } from '../database/database.module';
 import { CreateGroupDto } from './dto/create-group.dto';
+import { Group } from './entities/group.entity';
+import { GroupController } from './group.controller';
+import { groupProvider } from './group.provider';
 import { GroupRepository } from './group.repository';
+import { GroupService } from './group.service';
 
 describe('GroupController', () => {
   let groupController: GroupController;

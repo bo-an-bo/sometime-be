@@ -9,12 +9,13 @@ import {
   UploadedFile,
   UseFilters,
 } from '@nestjs/common';
-import { MemberService } from './member.service';
+import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+
+import { ApiFile } from '../api-file.decorator';
+import { HttpExceptionFilter } from '../http-exception.filter';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
-import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { HttpExceptionFilter } from '../http-exception.filter';
-import { ApiFile } from '../api-file.decorator';
+import { MemberService } from './member.service';
 
 @UseFilters(HttpExceptionFilter)
 @ApiTags('Member')

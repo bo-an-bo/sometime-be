@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+
+import { GroupService } from '../group/group.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { EventRepository } from './event.repository';
-import { GroupService } from '../group/group.service';
 
 @Injectable()
 export class EventService {

@@ -7,10 +7,11 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { EventService } from './event.service';
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
-import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { EventService } from './event.service';
 
 @ApiTags('Event')
 @Controller('group/:groupId/event')

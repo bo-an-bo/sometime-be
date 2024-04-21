@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Member } from './interfaces/member.interface';
 import { Model } from 'mongoose';
+
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
+import { Member } from './interfaces/member.interface';
 
 @Injectable()
 export class MemberRepository {

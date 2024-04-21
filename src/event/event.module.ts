@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { EventService } from './event.service';
-import { EventController } from './event.controller';
+
 import { DatabaseModule } from '../database/database.module';
-import { EventRepository } from './event.repository';
-import { eventProviders } from './event.providers';
 import { GroupModule } from '../group/group.module';
+import { EventController } from './event.controller';
+import { eventProviders } from './event.providers';
+import { EventRepository } from './event.repository';
+import { EventService } from './event.service';
 
 @Module({
   imports: [DatabaseModule, GroupModule],

@@ -1,4 +1,5 @@
 import { Connection } from 'mongoose';
+
 import { EventSchema } from './schemas/event.schema';
 
 export const eventProviders = [

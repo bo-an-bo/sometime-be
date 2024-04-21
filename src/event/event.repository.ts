@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { Event } from './interfaces/event.interface';
+
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { Event } from './interfaces/event.interface';
 
 @Injectable()
 export class EventRepository {
