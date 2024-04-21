@@ -53,6 +53,19 @@ export class MemberController {
     return this.memberService.createGroupMembers(groupId, createMemberDto);
   }
 
+  @Post('/excel')
+  @ApiOperation({
+    summary: '모임 회원 명단 업로드',
+    description: '모임 회원 명단을 재구성합니다.',
+  })
+  @ApiFile('excel')
+  uploadMemberFIle(
+    @Param('groupId') groupId: string,
+    @UploadedFile() excel: Express.Multer.File,
+  ) {
+    return this.memberService.uploadMemberFile(groupId, excel);
+  }
+
   @Get()
   @ApiOperation({
     summary: '모임 모든 회원 조회',
@@ -141,18 +154,5 @@ export class MemberController {
   })
   deleteAllGroupMembers(@Param('groupId') groupId: string) {
     return this.memberService.deleteAllGroupMembers(groupId);
-  }
-
-  @Post('/upload/excel')
-  @ApiOperation({
-    summary: '회원 명단 업로드',
-    description: '회원 명단을 재구성합니다.',
-  })
-  @ApiFile('excel')
-  async uploadMemberFIle(
-    @Param('groupId') groupId: string,
-    @UploadedFile() excel: Express.Multer.File,
-  ) {
-    return await this.memberService.uploadMemberFile(groupId, excel);
   }
 }
