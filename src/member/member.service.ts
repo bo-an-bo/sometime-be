@@ -42,9 +42,15 @@ export class MemberService {
   }
 
   async findAll(groupId: string): Promise<Member[]> {
-    //lookup 써서 join하려고 했는데 model처리가 어려워서 임시로..디비 두번 접근
     const group = await this.groupService.findOne(groupId);
-    return (await this.memberRepository.findAll(group.members)) as Member[];
+
+    const members = [];
+    for (const memberId of group.members) {
+      const member = await this.memberRepository.findOne(memberId);
+      if (member) members.push(member);
+    }
+
+    return members;
   }
 
   async findOne(groupId: string, memberId: string): Promise<Member> {

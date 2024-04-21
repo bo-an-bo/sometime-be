@@ -15,10 +15,6 @@ export class MemberRepository {
     return this.memberModel.create(createMemberDto);
   }
 
-  findAll(members: string[]): Promise<Member[]> {
-    return this.memberModel.find({ _id: { $in: members } }).exec();
-  }
-
   findOne(memberId: string): Promise<Member> {
     return this.memberModel.findById(memberId).exec();
   }
