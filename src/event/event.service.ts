@@ -11,39 +11,54 @@ export class EventService {
     private readonly groupService: GroupService,
   ) {}
 
-  create(groupId: string, createEventDto: CreateEventDto) {
-    return { groupId, event: this.eventRepository.create(createEventDto) };
+  async create(groupId: string, createEventDto: CreateEventDto) {
+    const createdEvent = await this.eventRepository.create(createEventDto);
+    await this.groupService.addEvent(groupId, createdEvent.id);
+
+    return createdEvent;
   }
 
   async findAll(groupId: string) {
     const group = await this.groupService.findOne(groupId);
-    return {
-      groupId,
-      events: group.events,
-    };
+
+    const events = [];
+    for (const eventId of group.events) {
+      events.push(await this.eventRepository.findOne(eventId));
+    }
+
+    return events;
   }
 
-  findOne(groupId: string, eventId: string) {
-    const group = this.groupService.findOne(groupId);
-    const event = this.eventRepository.findOne(eventId);
+  async findOne(groupId: string, eventId: string) {
+    const group = await this.groupService.findOne(groupId);
+    const event = await this.eventRepository.findOne(eventId);
+
     return {
-      groupId,
       group,
-      eventId,
       event,
     };
   }
 
-  update(groupId: string, eventId: string, updateEventDto: UpdateEventDto) {
+  async update(
+    groupId: string,
+    eventId: string,
+    updateEventDto: UpdateEventDto,
+  ) {
+    const group = await this.groupService.findOne(groupId);
+    const event = await this.eventRepository.findOne(eventId);
+
+    for (const key in updateEventDto) {
+      event[key] = updateEventDto[key];
+    }
+    await this.eventRepository.update(eventId, event);
+
     return {
-      groupId,
-      eventId,
-      event: this.eventRepository.update(eventId, updateEventDto),
+      group,
+      event,
     };
   }
 
-  remove(groupId: string, eventId: string) {
-    const group = this.groupService.findOne(groupId);
-    return this.eventRepository.delete(eventId);
+  async remove(groupId: string, eventId: string) {
+    return await this.groupService.deleteEvent(groupId, eventId);
   }
 }
