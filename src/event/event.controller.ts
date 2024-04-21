@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
@@ -23,20 +15,23 @@ export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Post()
-  create(@Body() createEventDto: CreateEventDto) {
-    return this.eventService.create(createEventDto);
+  create(
+    @Param('groupId') groupId: string,
+    @Body() createEventDto: CreateEventDto,
+  ) {
+    return this.eventService.create(groupId, createEventDto);
   }
 
   @Get()
-  findAll() {
-    return this.eventService.findAll();
+  findAll(@Param('groupId') groupId: string) {
+    return this.eventService.findAll(groupId);
   }
 
   @Get(':eventId')
   @ApiParam({
-    name: 'memberId',
+    name: 'eventId',
     required: true,
-    description: '모임 회원 ID',
+    description: '이벤트 ID',
   })
   findOne(
     @Param('groupId') groupId: string,
@@ -47,24 +42,25 @@ export class EventController {
 
   @Patch(':eventId')
   @ApiParam({
-    name: 'memberId',
+    name: 'eventId',
     required: true,
-    description: '모임 회원 ID',
+    description: '이벤트 ID',
   })
   update(
+    @Param('groupId') groupId: string,
     @Param('eventId') eventId: string,
     @Body() updateEventDto: UpdateEventDto,
   ) {
-    return this.eventService.update(+eventId, updateEventDto);
+    return this.eventService.update(groupId, eventId, updateEventDto);
   }
 
-  @Delete(':eventId')
+  @Patch(':eventId')
   @ApiParam({
-    name: 'memberId',
+    name: 'eventId',
     required: true,
-    description: '모임 회원 ID',
+    description: '이벤트 ID',
   })
-  remove(@Param('eventId') eventId: string) {
-    return this.eventService.remove(+eventId);
+  remove(@Param('groupId') groupId: string, @Param('eventId') eventId: string) {
+    return this.eventService.remove(groupId, eventId);
   }
 }

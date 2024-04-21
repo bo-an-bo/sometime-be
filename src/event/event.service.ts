@@ -1,29 +1,49 @@
 import { Injectable } from '@nestjs/common';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { EventRepository } from './event.repository';
+import { GroupService } from '../group/group.service';
 
 @Injectable()
 export class EventService {
-  create(createEventDto: CreateEventDto) {
-    return createEventDto;
+  constructor(
+    private readonly eventRepository: EventRepository,
+    private readonly groupService: GroupService,
+  ) {}
+
+  create(groupId: string, createEventDto: CreateEventDto) {
+    return { groupId, event: this.eventRepository.create(createEventDto) };
   }
 
-  findAll() {
-    return `This action returns all event`;
-  }
-
-  findOne(groupId: string, eventId: string) {
+  async findAll(groupId: string) {
+    const group = await this.groupService.findOne(groupId);
     return {
       groupId,
-      eventId,
+      events: group.events,
     };
   }
 
-  update(eventId: number, updateEventDto: UpdateEventDto) {
-    return `This action updates a #${eventId} event` + updateEventDto;
+  findOne(groupId: string, eventId: string) {
+    const group = this.groupService.findOne(groupId);
+    const event = this.eventRepository.findOne(eventId);
+    return {
+      groupId,
+      group,
+      eventId,
+      event,
+    };
   }
 
-  remove(eventId: number) {
-    return `This action removes a #${eventId} event`;
+  update(groupId: string, eventId: string, updateEventDto: UpdateEventDto) {
+    return {
+      groupId,
+      eventId,
+      event: this.eventRepository.update(eventId, updateEventDto),
+    };
+  }
+
+  remove(groupId: string, eventId: string) {
+    const group = this.groupService.findOne(groupId);
+    return this.eventRepository.delete(eventId);
   }
 }
