@@ -22,6 +22,13 @@ export class GroupService {
     return group;
   }
 
+  async addEvent(groupId: string, eventId: string): Promise<Group> {
+    const group = (await this.groupRepository.findOne(groupId)) as Group;
+    group.events.push(eventId);
+    await this.groupRepository.update(groupId, group);
+    return group;
+  }
+
   async findAll(): Promise<Group[]> {
     return (await this.groupRepository.findAll()) as Group[];
   }
@@ -51,6 +58,15 @@ export class GroupService {
     group.members = groupMembers.filter(
       (member) => !memberIds.find((id) => id === member),
     );
+
+    await this.groupRepository.update(groupId, group);
+  }
+
+  async deleteEvent(groupId: string, eventId: string): Promise<void> {
+    const group = (await this.groupRepository.findOne(groupId)) as Group;
+    const groupEvents = group.events;
+
+    group.events = groupEvents.filter((event) => event !== eventId);
 
     await this.groupRepository.update(groupId, group);
   }
