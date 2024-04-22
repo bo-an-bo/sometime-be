@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { Group } from './interfaces/group.interface';
+
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
+import { Group } from './interfaces/group.interface';
 
 @Injectable()
 export class GroupRepository {

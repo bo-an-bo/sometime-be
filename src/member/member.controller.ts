@@ -9,12 +9,13 @@ import {
   UploadedFile,
   UseFilters,
 } from '@nestjs/common';
-import { MemberService } from './member.service';
+import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+
+import { ApiFile } from '../common/decorators/api-file.decorator';
+import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
-import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { HttpExceptionFilter } from '../http-exception.filter';
-import { ApiFile } from '../api-file.decorator';
+import { MemberService } from './member.service';
 
 @UseFilters(HttpExceptionFilter)
 @ApiTags('Member')
@@ -50,6 +51,19 @@ export class MemberController {
     @Body() createMemberDto: CreateMemberDto[],
   ) {
     return this.memberService.createGroupMembers(groupId, createMemberDto);
+  }
+
+  @Post('/excel')
+  @ApiOperation({
+    summary: '모임 회원 명단 업로드',
+    description: '모임 회원 명단을 재구성합니다.',
+  })
+  @ApiFile('excel')
+  uploadMemberFIle(
+    @Param('groupId') groupId: string,
+    @UploadedFile() excel: Express.Multer.File,
+  ) {
+    return this.memberService.uploadMemberFile(groupId, excel);
   }
 
   @Get()
@@ -140,18 +154,5 @@ export class MemberController {
   })
   deleteAllGroupMembers(@Param('groupId') groupId: string) {
     return this.memberService.deleteAllGroupMembers(groupId);
-  }
-
-  @Post('/upload/excel')
-  @ApiOperation({
-    summary: '회원 명단 업로드',
-    description: '회원 명단을 재구성합니다.',
-  })
-  @ApiFile('excel')
-  async uploadMemberFIle(
-    @Param('groupId') groupId: string,
-    @UploadedFile() excel: Express.Multer.File,
-  ) {
-    return await this.memberService.uploadMemberFile(groupId, excel);
   }
 }

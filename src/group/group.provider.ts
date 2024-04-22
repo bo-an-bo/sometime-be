@@ -1,4 +1,5 @@
 import { Connection } from 'mongoose';
+
 import { GroupSchema } from './schemas/group.schema';
 
 export const groupProvider = [

@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { UserModule } from './user/user.module';
-import { GroupModule } from './group/group.module';
-import { AuthModule } from './auth/auth.module';
-import { MemberModule } from './member/member.module';
 import { ConfigModule } from '@nestjs/config';
+
+import { AuthModule } from './auth/auth.module';
 import { EventModule } from './event/event.module';
+import { GroupModule } from './group/group.module';
+import { MemberModule } from './member/member.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [

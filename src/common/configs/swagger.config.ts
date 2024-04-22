@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-export const configSwagger = (app: INestApplication<any>) => {
+export const swaggerConfig = (app: INestApplication<any>) => {
   const config = new DocumentBuilder()
     .setTitle('sometime API')
     .addTag('Group', '모임 관련 API')

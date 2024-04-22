@@ -1,4 +1,6 @@
-export class Event {
+import { Document } from 'mongoose';
+
+export interface Event extends Document {
   name: string;
   description: string;
   startDate: Date;

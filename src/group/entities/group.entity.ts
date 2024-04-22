@@ -9,5 +9,6 @@ export class Group {
       authorities: string[];
     },
   ];
-  members: string[];
+  members: any[];
+  events: string[];
 }

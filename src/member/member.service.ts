@@ -1,16 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { MemberRepository } from './member.repository';
-import { Member } from './entities/member.entity';
+import mongoose from 'mongoose';
+
+import { ExcelService } from '../excel/excel.service';
+import { GroupService } from '../group/group.service';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
-import { GroupService } from '../group/group.service';
-import mongoose from 'mongoose';
+import { Member } from './entities/member.entity';
+import { MemberRepository } from './member.repository';
 
 @Injectable()
 export class MemberService {
   constructor(
     private readonly memberRepository: MemberRepository,
     private readonly groupService: GroupService,
+    private readonly excelService: ExcelService,
   ) {}
 
   async create(
@@ -42,9 +45,15 @@ export class MemberService {
   }
 
   async findAll(groupId: string): Promise<Member[]> {
-    //lookup 써서 join하려고 했는데 model처리가 어려워서 임시로..디비 두번 접근
     const group = await this.groupService.findOne(groupId);
-    return (await this.memberRepository.findAll(group.members)) as Member[];
+
+    const members = [];
+    for (const memberId of group.members) {
+      const member = await this.memberRepository.findOne(memberId);
+      if (member) members.push(member);
+    }
+
+    return members;
   }
 
   async findOne(groupId: string, memberId: string): Promise<Member> {
@@ -101,7 +110,7 @@ export class MemberService {
     excel: Express.Multer.File,
   ): Promise<Member[]> {
     const members: Member[] =
-      await this.groupService.convertMemberExcelToJSON(excel);
+      await this.excelService.convertMemberExcelToJSON(excel);
     //멤버 삭제
     await this.deleteAllGroupMembers(groupId);
     //group에 멤버 추가

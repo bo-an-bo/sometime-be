@@ -1,13 +1,15 @@
-import { MemberController } from './member.controller';
-import { MemberService } from './member.service';
-import mongoose from 'mongoose';
 import { Test } from '@nestjs/testing';
-import { DatabaseModule } from '../database/database.module';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
 import * as process from 'process';
+
+import { DatabaseModule } from '../database/database.module';
+import { ExcelService } from '../excel/excel.service';
+import { GroupModule } from '../group/group.module';
+import { MemberController } from './member.controller';
 import { memberProvider } from './member.provider';
 import { MemberRepository } from './member.repository';
-import { GroupModule } from '../group/group.module';
+import { MemberService } from './member.service';
 
 describe('MemberController', () => {
   // let memberController: MemberController;
@@ -21,7 +23,12 @@ describe('MemberController', () => {
     await Test.createTestingModule({
       imports: [DatabaseModule, GroupModule],
       controllers: [MemberController],
-      providers: [MemberService, ...memberProvider, MemberRepository],
+      providers: [
+        MemberService,
+        ...memberProvider,
+        MemberRepository,
+        ExcelService,
+      ],
     }).compile();
 
     // memberService = module.get<MemberService>(MemberService);

@@ -10,5 +10,6 @@ export interface Group extends Document {
       authorities: string[];
     },
   ];
-  members: string[];
+  members: any[];
+  events: string[];
 }
