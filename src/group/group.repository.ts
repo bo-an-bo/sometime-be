@@ -3,34 +3,35 @@ import { Model } from 'mongoose';
 
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
-import { Group } from './interfaces/group.interface';
+import { Group } from './entities/group.entity';
+import { GroupInterface } from './interfaces/group.interface';
 
 @Injectable()
 export class GroupRepository {
   constructor(
     @Inject('GROUP_MODEL')
-    private readonly groupModel: Model<Group>,
+    private readonly groupModel: Model<GroupInterface>,
   ) {}
 
   create(createGroupDto: CreateGroupDto): Promise<Group> {
-    return this.groupModel.create(createGroupDto);
+    return this.groupModel.create(createGroupDto) as Promise<Group>;
   }
 
   findAll(): Promise<Group[]> {
-    return this.groupModel.find().exec();
+    return this.groupModel.find().exec() as Promise<Group[]>;
   }
 
   findOne(groupId: string): Promise<Group> {
-    return this.groupModel.findById(groupId).exec();
+    return this.groupModel.findById(groupId).exec() as Promise<Group>;
   }
 
   update(groupId: string, updateGroupDto: UpdateGroupDto): Promise<Group> {
     return this.groupModel
       .findByIdAndUpdate(groupId, updateGroupDto, { new: true })
-      .exec();
+      .exec() as Promise<Group>;
   }
 
   delete(groupId: string) {
-    this.groupModel.findByIdAndDelete(groupId).exec();
+    this.groupModel.findByIdAndDelete(groupId).exec().then();
   }
 }

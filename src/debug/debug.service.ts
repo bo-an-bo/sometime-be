@@ -1,17 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 
-import { Group } from '../group/interfaces/group.interface';
+import { Event } from '../event/interfaces/event.interface';
+import { GroupInterface } from '../group/interfaces/group.interface';
+import { Member } from '../member/interfaces/member.interface';
 
 @Injectable()
 export class DebugService {
   constructor(
     @Inject('GROUP_MODEL')
-    private readonly groupModel: Model<Group>,
+    private readonly groupModel: Model<GroupInterface>,
     @Inject('MEMBER_MODEL')
-    private readonly memberModel: Model<Group>,
+    private readonly memberModel: Model<Member>,
     @Inject('EVENT_MODEL')
-    private readonly eventModel: Model<Group>,
+    private readonly eventModel: Model<Event>,
   ) {}
 
   async findAll() {

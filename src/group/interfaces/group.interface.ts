@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-export interface Group extends Document {
+export interface GroupInterface extends Document {
   name: string;
   description: string;
   manager: string;
