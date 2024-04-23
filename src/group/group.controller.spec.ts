@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 import * as process from 'process';
 
 import { DatabaseModule } from '../database/database.module';
+import { EventModule } from '../event/event.module';
+import { MemberModule } from '../member/member.module';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { Group } from './entities/group.entity';
 import { GroupController } from './group.controller';
@@ -21,7 +23,7 @@ describe('GroupController', () => {
     process.env.MONGODB_URI = mongoServer.getUri();
 
     const module: TestingModule = await Test.createTestingModule({
-      imports: [DatabaseModule],
+      imports: [DatabaseModule, MemberModule, EventModule],
       controllers: [GroupController],
       providers: [GroupService, ...groupProviders, GroupRepository],
     }).compile();
