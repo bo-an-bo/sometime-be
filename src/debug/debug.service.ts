@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 
-import { Event } from '../event/interfaces/event.interface';
 import { GroupInterface } from '../group/interfaces/group.interface';
 import { MemberInterface } from '../member/interfaces/member.interface';
 

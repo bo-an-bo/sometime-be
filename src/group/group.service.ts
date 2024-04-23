@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { CreateEventDto } from '../event/dto/create-event.dto';
 import { UpdateEventDto } from '../event/dto/update-event.dto';
+import { Event } from '../event/entities/event.entity';
 import { EventService } from '../event/event.service';
 import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { UpdateMemberDto } from '../member/dto/update-member.dto';
@@ -128,8 +129,11 @@ export class GroupService {
     eventId: string,
     updateEventDto: UpdateEventDto,
   ) {
-    const group = await this.groupRepository.findOne(groupId);
-    const event = await this.eventService.update(eventId, updateEventDto);
+    const group: Group = await this.groupRepository.findOne(groupId);
+    const event: Event = await this.eventService.update(
+      eventId,
+      updateEventDto,
+    );
 
     group.events = group.events.map((e) => (e === eventId ? event.id : e));
 
