@@ -21,6 +21,7 @@ import { UpdateMemberDto } from '../member/dto/update-member.dto';
 import { Member } from '../member/member.decorators';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
+import { UploadGroupDto } from './dto/upload-group.dto';
 import { Group } from './group.decorators';
 import { GroupService } from './group.service';
 
@@ -36,7 +37,7 @@ export class GroupController {
     description: '모임을 생성합니다.',
   })
   @ApiFile('memberExcel')
-  @ApiBody({ type: CreateGroupDto })
+  @ApiBody({ type: UploadGroupDto })
   create(
     @Body() createGroupDto: CreateGroupDto,
     @UploadedFile() memberExcel: Express.Multer.File,
