@@ -7,7 +7,7 @@ import { DatabaseModule } from '../database/database.module';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { Group } from './entities/group.entity';
 import { GroupController } from './group.controller';
-import { groupProvider } from './group.provider';
+import { groupProviders } from './group.providers';
 import { GroupRepository } from './group.repository';
 import { GroupService } from './group.service';
 
@@ -23,7 +23,7 @@ describe('GroupController', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [DatabaseModule],
       controllers: [GroupController],
-      providers: [GroupService, ...groupProvider, GroupRepository],
+      providers: [GroupService, ...groupProviders, GroupRepository],
     }).compile();
 
     groupService = module.get<GroupService>(GroupService);
@@ -39,11 +39,11 @@ describe('GroupController', () => {
         members: ['user1', 'user2'],
       };
 
-      const result: Group = await groupService.create(group);
+      const result: Group = await groupService.create(group, null);
 
       jest.spyOn(groupService, 'create').mockImplementation(async () => result);
 
-      expect(await groupController.create(group)).toBe(result);
+      expect(await groupController.create(group, null)).toBe(result);
       expect(result).toHaveProperty('name', group.name);
       expect(result).toHaveProperty('description', group.description);
       expect(result).toHaveProperty('subManagers', group.subManagers);

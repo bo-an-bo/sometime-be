@@ -26,11 +26,7 @@ export class MemberRepository {
       .exec();
   }
 
-  delete(memberId: string[]) {
-    this.memberModel.deleteMany({ _id: { $in: memberId } }).exec();
-  }
-
-  deleteAll() {
-    this.memberModel.deleteMany({}).exec();
+  deleteMany(memberIds: string[]) {
+    this.memberModel.deleteMany({ _id: { $in: memberIds } }).exec();
   }
 }

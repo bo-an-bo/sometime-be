@@ -11,5 +11,5 @@ export interface Group extends Document {
     },
   ];
   members: any[];
-  events: string[];
+  events: any[];
 }

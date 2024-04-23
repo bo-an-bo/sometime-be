@@ -10,5 +10,5 @@ export class Group {
     },
   ];
   members: any[];
-  events: string[];
+  events: any[];
 }

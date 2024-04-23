@@ -11,16 +11,12 @@ export class EventRepository {
     private readonly eventModel: Model<Event>,
   ) {}
 
-  async create(createEventDto: CreateEventDto): Promise<Event> {
-    return await this.eventModel.create(createEventDto);
+  create(createEventDto: CreateEventDto): Promise<Event> {
+    return this.eventModel.create(createEventDto);
   }
 
-  findAll(): Promise<Event[]> {
-    return this.eventModel.find().exec();
-  }
-
-  async findOne(eventId: string): Promise<Event> {
-    return await this.eventModel.findById(eventId).exec();
+  findOne(eventId: string): Promise<Event> {
+    return this.eventModel.findById(eventId).exec();
   }
 
   update(eventId: string, event: Event): Promise<Event> {
@@ -30,6 +26,6 @@ export class EventRepository {
   }
 
   delete(eventId: string) {
-    this.eventModel.findByIdAndDelete(eventId);
+    this.eventModel.findByIdAndDelete(eventId).exec();
   }
 }

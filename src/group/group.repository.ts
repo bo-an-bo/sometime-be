@@ -33,8 +33,4 @@ export class GroupRepository {
   delete(groupId: string) {
     this.groupModel.findByIdAndDelete(groupId).exec();
   }
-
-  deleteAll() {
-    this.groupModel.deleteMany({}).exec();
-  }
 }
