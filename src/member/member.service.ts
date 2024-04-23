@@ -13,7 +13,7 @@ export class MemberService {
     private readonly excelService: ExcelService,
   ) {}
 
-  async create(createMemberDto: CreateMemberDto): Promise<Member> {
+  async create(createMemberDto: CreateMemberDto): Promise<string> {
     return (await this.memberRepository.create(createMemberDto)).id;
   }
 

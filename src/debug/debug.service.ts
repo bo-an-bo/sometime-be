@@ -3,7 +3,7 @@ import { Model } from 'mongoose';
 
 import { Event } from '../event/interfaces/event.interface';
 import { GroupInterface } from '../group/interfaces/group.interface';
-import { Member } from '../member/interfaces/member.interface';
+import { MemberInterface } from '../member/interfaces/member.interface';
 
 @Injectable()
 export class DebugService {
@@ -11,7 +11,7 @@ export class DebugService {
     @Inject('GROUP_MODEL')
     private readonly groupModel: Model<GroupInterface>,
     @Inject('MEMBER_MODEL')
-    private readonly memberModel: Model<Member>,
+    private readonly memberModel: Model<MemberInterface>,
     @Inject('EVENT_MODEL')
     private readonly eventModel: Model<Event>,
   ) {}
