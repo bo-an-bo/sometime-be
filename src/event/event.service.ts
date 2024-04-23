@@ -1,51 +1,22 @@
 import { Injectable } from '@nestjs/common';
 
-import { GroupService } from '../group/group.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { EventRepository } from './event.repository';
 
 @Injectable()
 export class EventService {
-  constructor(
-    private readonly eventRepository: EventRepository,
-    private readonly groupService: GroupService,
-  ) {}
+  constructor(private readonly eventRepository: EventRepository) {}
 
-  async create(groupId: string, createEventDto: CreateEventDto) {
-    const createdEvent = await this.eventRepository.create(createEventDto);
-    await this.groupService.addEvent(groupId, createdEvent.id);
-
-    return createdEvent;
+  async create(createEventDto: CreateEventDto) {
+    return (await this.eventRepository.create(createEventDto)).id;
   }
 
-  async findAll(groupId: string) {
-    const group = await this.groupService.findOne(groupId);
-
-    const events = [];
-    for (const eventId of group.events) {
-      events.push(await this.eventRepository.findOne(eventId));
-    }
-
-    return events;
+  async getOne(eventId: string) {
+    return await this.eventRepository.findOne(eventId);
   }
 
-  async findOne(groupId: string, eventId: string) {
-    const group = await this.groupService.findOne(groupId);
-    const event = await this.eventRepository.findOne(eventId);
-
-    return {
-      group,
-      event,
-    };
-  }
-
-  async update(
-    groupId: string,
-    eventId: string,
-    updateEventDto: UpdateEventDto,
-  ) {
-    const group = await this.groupService.findOne(groupId);
+  async update(eventId: string, updateEventDto: UpdateEventDto) {
     const event = await this.eventRepository.findOne(eventId);
 
     for (const key in updateEventDto) {
@@ -53,13 +24,10 @@ export class EventService {
     }
     await this.eventRepository.update(eventId, event);
 
-    return {
-      group,
-      event,
-    };
+    return event;
   }
 
-  async remove(groupId: string, eventId: string) {
-    return await this.groupService.deleteEvent(groupId, eventId);
+  delete(eventId: string) {
+    return this.eventRepository.delete(eventId);
   }
 }
