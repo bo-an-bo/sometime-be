@@ -18,27 +18,27 @@ export class CreateGroupDto {
   })
   readonly description: string;
 
-  @ApiProperty({
-    required: false,
-    description: '부모임장 사용자의 ObjectId와 권한',
-    example: [
-      {
-        user: '60f4b3b3b3b3b3b3b3b3b3',
-        authorities: ['subManager'],
-      },
-    ],
-  })
-  readonly subManagers: [
-    {
-      user: string;
-      authorities: string[];
-    },
-  ];
-
-  @ApiProperty({
-    required: false,
-    description: '모임원 사용자의 ObjectId',
-    example: ['60f4b3b3b3b3b3b3b3b3b3'],
-  })
-  readonly members: string[];
+  // @ApiProperty({
+  //   required: false,
+  //   description: '부모임장 사용자의 ObjectId와 권한',
+  //   example: [
+  //     {
+  //       user: '60f4b3b3b3b3b3b3b3b3b3',
+  //       authorities: ['subManager'],
+  //     },
+  //   ],
+  // })
+  // readonly subManagers: [
+  //   {
+  //     user: string;
+  //     authorities: string[];
+  //   },
+  // ];
+  //
+  // @ApiProperty({
+  //   required: false,
+  //   description: '모임원 사용자의 ObjectId',
+  //   example: ['60f4b3b3b3b3b3b3b3b3b3'],
+  // })
+  // readonly members: string[] | null;
 }
