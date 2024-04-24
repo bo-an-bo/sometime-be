@@ -7,6 +7,7 @@ import { EventService } from '../event/event.service';
 import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { UpdateMemberDto } from '../member/dto/update-member.dto';
 import { MemberService } from '../member/member.service';
+import { TransactionService } from '../transaction/transaction.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { Group } from './entities/group.entity';
@@ -18,6 +19,7 @@ export class GroupService {
     private readonly groupRepository: GroupRepository,
     private readonly memberService: MemberService,
     private readonly eventService: EventService,
+    private readonly transactionService: TransactionService,
   ) {}
 
   async create(
@@ -57,6 +59,16 @@ export class GroupService {
     group.members = await this.memberService.uploadMemberFile(memberExcel);
 
     return await this.groupRepository.update(groupId, group);
+  }
+
+  async uploadTransactionFile(
+    groupId: string,
+    transactionExcel: Express.Multer.File,
+  ): Promise<void> {
+    await this.transactionService.uploadTransactionFile(
+      groupId,
+      transactionExcel,
+    );
   }
 
   async addEvent(

@@ -59,6 +59,20 @@ export class GroupController {
     return this.groupService.addMember(groupId, createMemberDto);
   }
 
+  @Post(':groupId/transaction/excel')
+  @Group()
+  @ApiOperation({
+    summary: '모임 거래내역 업로드',
+    description: '모임의 거래내역을 업로드합니다.',
+  })
+  @ApiFile('transactionFile')
+  uploadTransactionFile(
+    @Param('groupId') groupId: string,
+    @UploadedFile() transactionExcel: Express.Multer.File,
+  ) {
+    return this.groupService.uploadTransactionFile(groupId, transactionExcel);
+  }
+
   @Post(':groupId/event')
   @Event()
   @ApiOperation({
@@ -78,6 +92,7 @@ export class GroupController {
     summary: '모임 회원 명단 엑셀 업로드',
     description: '모임 회원 명단 엑셀을 업로드하고, 회원을 재구성합니다.',
   })
+  @ApiFile('memberFile')
   uploadMemberFile(
     @Param('groupId') groupId: string,
     @UploadedFile() memberExcel: Express.Multer.File,
