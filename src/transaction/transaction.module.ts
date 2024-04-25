@@ -10,9 +10,9 @@ import { TransactionService } from './transaction.service';
   imports: [DatabaseModule],
   providers: [
     TransactionService,
+    ...transactionProviders,
     TransactionRepository,
     ExcelService,
-    ...transactionProviders,
   ],
   exports: [TransactionService],
 })

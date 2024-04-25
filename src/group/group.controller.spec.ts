@@ -6,6 +6,7 @@ import * as process from 'process';
 import { DatabaseModule } from '../database/database.module';
 import { EventModule } from '../event/event.module';
 import { MemberModule } from '../member/member.module';
+import { TransactionModule } from '../transaction/transaction.module';
 import { Group } from './entities/group.entity';
 import { GroupController } from './group.controller';
 import { groupProviders } from './group.providers';
@@ -22,7 +23,7 @@ describe('GroupController', () => {
     process.env.MONGODB_URI = mongoServer.getUri();
 
     const module: TestingModule = await Test.createTestingModule({
-      imports: [DatabaseModule, MemberModule, EventModule],
+      imports: [DatabaseModule, MemberModule, EventModule, TransactionModule],
       controllers: [GroupController],
       providers: [GroupService, ...groupProviders, GroupRepository],
     }).compile();
