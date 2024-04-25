@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class Metadata {
+class Metadata {
   @IsString()
   @ApiProperty({ description: '모임 ID', example: '64125455d454s' })
   groupId: string;
@@ -13,6 +13,10 @@ export class Metadata {
   @IsNumber()
   @ApiProperty({ description: '거래 금액', example: 25000 })
   amount: number;
+
+  @IsString()
+  @ApiProperty({ description: '내용', example: '이소현' })
+  name: string;
 }
 
 export class CreateTransactionDto {

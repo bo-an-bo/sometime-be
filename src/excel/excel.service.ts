@@ -107,7 +107,7 @@ export class ExcelService {
     const worksheet = workbook.getWorksheet(1);
 
     const transactions: Transaction[] = [];
-    const columns: string[] = ['거래일시', '구분', '거래금액'];
+    const columns: string[] = ['거래일시', '구분', '거래금액', '', '', '내용'];
 
     worksheet.eachRow((row, rowNumber) => {
       if (rowNumber > 11) {
@@ -116,6 +116,7 @@ export class ExcelService {
           groupId: transactionGroupId,
           transactionType: '',
           amount: 0,
+          name: '',
         };
         row.eachCell((cell, colNumber) => {
           const col = String(columns[colNumber - 2]).trim();
@@ -125,6 +126,8 @@ export class ExcelService {
             transaction.metadata.transactionType = String(cell.value).trim();
           if (col == '거래금액')
             transaction.metadata.amount = Number(cell.text.replace(/,/g, ''));
+          if (col == '내용')
+            transaction.metadata.name = String(cell.value).trim();
         });
         transactions.push(transaction);
       }

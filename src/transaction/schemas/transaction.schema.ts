@@ -5,6 +5,7 @@ export const TransactionSchema = new Schema({
     groupId: String,
     transactionType: String,
     amount: Number,
+    name: String,
   },
   timestamp: Date,
 });

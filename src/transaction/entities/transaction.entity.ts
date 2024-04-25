@@ -3,6 +3,7 @@ export class Transaction {
     groupId: string;
     transactionType: string;
     amount: number;
+    name: string;
   };
   timestamp: Date;
 }

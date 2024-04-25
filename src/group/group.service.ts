@@ -7,6 +7,7 @@ import { EventService } from '../event/event.service';
 import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { UpdateMemberDto } from '../member/dto/update-member.dto';
 import { MemberService } from '../member/member.service';
+import { GetTransactionPeriodDto } from '../transaction/dto/get-transaction-period.dto';
 import { TransactionService } from '../transaction/transaction.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -109,6 +110,20 @@ export class GroupService {
     return this.groupRepository.findOne(groupId).then((group) => {
       return this.getAllEvents(group.events);
     });
+  }
+
+  async getTransactions(groupId: string) {
+    return this.transactionService.getTransactions(groupId);
+  }
+
+  async getTransactionByPeriod(
+    groupId: string,
+    transactionDto: GetTransactionPeriodDto,
+  ) {
+    return this.transactionService.getTransactionByPeriod(
+      groupId,
+      transactionDto,
+    );
   }
 
   async update(
