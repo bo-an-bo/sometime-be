@@ -1,4 +1,9 @@
 export interface TransactionInterface extends Document {
-  groupId: string;
-  transaction: object;
+  metadata: {
+    groupId: string;
+    transactionType: string;
+    amount: number;
+    name: string;
+  };
+  timestamp: Date;
 }
