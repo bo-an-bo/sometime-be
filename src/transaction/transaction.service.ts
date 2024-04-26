@@ -32,11 +32,11 @@ export class TransactionService {
     return this.transactionRepository.getTransactions(groupId);
   }
 
-  async getTransactionByPeriod(
+  async getTransactionsByPeriod(
     groupId: string,
     transactionDto: GetTransactionPeriodDto,
   ) {
-    return this.transactionRepository.getTransactionByPeriod(
+    return this.transactionRepository.getTransactionsByPeriod(
       groupId,
       transactionDto,
     );

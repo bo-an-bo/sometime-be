@@ -20,7 +20,7 @@ export class TransactionRepository {
     return this.transactionModel.find({ 'metadata.groupId': groupId });
   }
 
-  async getTransactionByPeriod(
+  async getTransactionsByPeriod(
     groupId: string,
     transactionDto: GetTransactionPeriodDto,
   ): Promise<any> {

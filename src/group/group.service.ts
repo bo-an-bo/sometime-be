@@ -120,7 +120,7 @@ export class GroupService {
     groupId: string,
     transactionDto: GetTransactionPeriodDto,
   ) {
-    return this.transactionService.getTransactionByPeriod(
+    return this.transactionService.getTransactionsByPeriod(
       groupId,
       transactionDto,
     );

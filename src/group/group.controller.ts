@@ -167,7 +167,6 @@ export class GroupController {
     @Param('groupId') groupId: string,
     @Body() getTransactionPeriodDto: GetTransactionPeriodDto,
   ) {
-    console.log(getTransactionPeriodDto);
     return this.groupService.getTransactionByPeriod(
       groupId,
       getTransactionPeriodDto,
