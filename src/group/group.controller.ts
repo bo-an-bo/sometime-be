@@ -19,7 +19,7 @@ import { Event } from '../event/event.decorators';
 import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { UpdateMemberDto } from '../member/dto/update-member.dto';
 import { Member } from '../member/member.decorators';
-import { GetTransactionPeriodDto } from '../transaction/dto/get-transaction-period.dto';
+import { GetTransactionsPeriodDto } from '../transaction/dto/get-transaction-period.dto';
 import { Transaction } from '../transaction/transaction.decorators';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -163,13 +163,13 @@ export class GroupController {
     summary: '모임 거래내역 조회',
     description: '특정 모임의 거래내역을 기간을 설정하여 조회합니다.',
   })
-  getTransactionByPeriod(
+  getTransactionsByPeriod(
     @Param('groupId') groupId: string,
-    @Body() getTransactionPeriodDto: GetTransactionPeriodDto,
+    @Body() getTransactionsPeriodDto: GetTransactionsPeriodDto,
   ) {
-    return this.groupService.getTransactionByPeriod(
+    return this.groupService.getTransactionsByPeriod(
       groupId,
-      getTransactionPeriodDto,
+      getTransactionsPeriodDto,
     );
   }
 

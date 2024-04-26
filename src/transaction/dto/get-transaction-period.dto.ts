@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsDate, IsNotEmpty } from 'class-validator';
 
-export class GetTransactionPeriodDto {
+export class GetTransactionsPeriodDto {
   @IsNotEmpty()
   @IsDate()
   @Transform(({ value }) => new Date(value))
