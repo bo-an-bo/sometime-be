@@ -7,6 +7,8 @@ import { EventService } from '../event/event.service';
 import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { UpdateMemberDto } from '../member/dto/update-member.dto';
 import { MemberService } from '../member/member.service';
+import { GetTransactionsPeriodDto } from '../transaction/dto/get-transaction-period.dto';
+import { TransactionService } from '../transaction/transaction.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { Group } from './entities/group.entity';
@@ -18,6 +20,7 @@ export class GroupService {
     private readonly groupRepository: GroupRepository,
     private readonly memberService: MemberService,
     private readonly eventService: EventService,
+    private readonly transactionService: TransactionService,
   ) {}
 
   async create(
@@ -59,6 +62,16 @@ export class GroupService {
     return await this.groupRepository.update(groupId, group);
   }
 
+  async uploadTransactionFile(
+    groupId: string,
+    transactionExcel: Express.Multer.File,
+  ): Promise<void> {
+    await this.transactionService.uploadTransactionFile(
+      groupId,
+      transactionExcel,
+    );
+  }
+
   async addEvent(
     groupId: string,
     createEventDto: CreateEventDto,
@@ -97,6 +110,17 @@ export class GroupService {
     return this.groupRepository.findOne(groupId).then((group) => {
       return this.getAllEvents(group.events);
     });
+  }
+
+  async getTransactions(groupId: string) {
+    return this.transactionService.getTransactions(groupId);
+  }
+
+  async getTransactionsByPeriod(
+    groupId: string,
+    periodDto: GetTransactionsPeriodDto,
+  ) {
+    return this.transactionService.getTransactionsByPeriod(groupId, periodDto);
   }
 
   async update(

@@ -19,6 +19,8 @@ import { Event } from '../event/event.decorators';
 import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { UpdateMemberDto } from '../member/dto/update-member.dto';
 import { Member } from '../member/member.decorators';
+import { GetTransactionsPeriodDto } from '../transaction/dto/get-transaction-period.dto';
+import { Transaction } from '../transaction/transaction.decorators';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { UploadGroupDto } from './dto/upload-group.dto';
@@ -36,7 +38,7 @@ export class GroupController {
     summary: '모임 생성',
     description: '모임을 생성합니다.',
   })
-  @ApiFile('memberExcel')
+  @ApiFile('memberFile')
   @ApiBody({ type: UploadGroupDto })
   create(
     @Body() createGroupDto: CreateGroupDto,
@@ -78,11 +80,26 @@ export class GroupController {
     summary: '모임 회원 명단 엑셀 업로드',
     description: '모임 회원 명단 엑셀을 업로드하고, 회원을 재구성합니다.',
   })
+  @ApiFile('memberFile')
   uploadMemberFile(
     @Param('groupId') groupId: string,
     @UploadedFile() memberExcel: Express.Multer.File,
   ) {
     return this.groupService.uploadMemberFile(groupId, memberExcel);
+  }
+
+  @Post(':groupId/transaction/excel')
+  @Transaction()
+  @ApiOperation({
+    summary: '모임 거래내역 업로드',
+    description: '모임의 거래내역을 업로드합니다.',
+  })
+  @ApiFile('transactionFile')
+  uploadTransactionFile(
+    @Param('groupId') groupId: string,
+    @UploadedFile() transactionExcel: Express.Multer.File,
+  ) {
+    return this.groupService.uploadTransactionFile(groupId, transactionExcel);
   }
 
   @Get()
@@ -128,6 +145,32 @@ export class GroupController {
   })
   getEvents(@Param('groupId') groupId: string) {
     return this.groupService.getEvents(groupId);
+  }
+
+  @Get(':groupId/transaction')
+  @Transaction()
+  @ApiOperation({
+    summary: '모임 거래내역 조회',
+    description: '특정 모임의 거래내역을 조회합니다.',
+  })
+  getTransactions(@Param('groupId') groupId: string) {
+    return this.groupService.getTransactions(groupId);
+  }
+
+  @Post(':groupId/transaction/period')
+  @Transaction()
+  @ApiOperation({
+    summary: '모임 거래내역 조회',
+    description: '특정 모임의 거래내역을 기간을 설정하여 조회합니다.',
+  })
+  getTransactionsByPeriod(
+    @Param('groupId') groupId: string,
+    @Body() getTransactionsPeriodDto: GetTransactionsPeriodDto,
+  ) {
+    return this.groupService.getTransactionsByPeriod(
+      groupId,
+      getTransactionsPeriodDto,
+    );
   }
 
   @Patch(':groupId')
