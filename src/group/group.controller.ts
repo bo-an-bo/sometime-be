@@ -38,7 +38,7 @@ export class GroupController {
     summary: '모임 생성',
     description: '모임을 생성합니다.',
   })
-  @ApiFile('memberExcel')
+  @ApiFile('memberFile')
   @ApiBody({ type: UploadGroupDto })
   create(
     @Body() createGroupDto: CreateGroupDto,
