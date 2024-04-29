@@ -1,4 +1,5 @@
 import * as XLSX from 'exceljs';
+import * as DecryptXLSX from 'xlsx-populate';
 
 import { Member } from '../member/entities/member.entity';
 import { Transaction } from '../transaction/entities/transaction.entity';
@@ -100,39 +101,64 @@ export class ExcelService {
   async convertTransactionFileToTransactionArr(
     transactionGroupId: string,
     excel: Express.Multer.File,
-  ) {
-    const workbook = new XLSX.Workbook();
-    await workbook.xlsx.load(excel.buffer);
-
-    const worksheet = workbook.getWorksheet(1);
+    password: string,
+  ): Promise<Transaction[]> {
+    let workbook: DecryptXLSX.Workbook;
+    if (password) {
+      workbook = await DecryptXLSX.fromDataAsync(excel.buffer, {
+        password: password,
+      });
+    } else {
+      try {
+        workbook = await DecryptXLSX.fromDataAsync(excel.buffer);
+      } catch (e) {
+        throw new Error('비밀번호가 필요합니다.');
+      }
+    }
+    const worksheet = workbook.sheet(0); // Assume we are using the first worksheet
 
     const transactions: Transaction[] = [];
-    const columns: string[] = ['거래일시', '구분', '거래금액', '', '', '내용'];
+    const columns: string[] = [
+      '',
+      '거래일시',
+      '구분',
+      '거래금액',
+      '',
+      '',
+      '내용',
+    ];
+    const startRow = 12;
+    const endRow = worksheet.usedRange().endCell().rowNumber();
 
-    worksheet.eachRow((row, rowNumber) => {
-      if (rowNumber > 11) {
-        const transaction: Transaction = new Transaction();
-        transaction.metadata = {
-          groupId: transactionGroupId,
-          transactionType: '',
-          amount: 0,
-          name: '',
-        };
-        row.eachCell((cell, colNumber) => {
-          const col = String(columns[colNumber - 2]).trim();
-          if (col == '거래일시')
-            transaction.timestamp = this.parseDate(String(cell.value).trim());
-          if (col == '구분')
-            transaction.metadata.transactionType = String(cell.value).trim();
-          if (col == '거래금액')
-            transaction.metadata.amount = Number(cell.text.replace(/,/g, ''));
-          if (col == '내용')
-            transaction.metadata.name = String(cell.value).trim();
-        });
-        transactions.push(transaction);
-      }
-    });
+    for (let rowNumber = startRow; rowNumber <= endRow; rowNumber++) {
+      const row = worksheet.row(rowNumber);
+      const transaction: Transaction = new Transaction();
+      transaction.timestamp = new Date();
 
+      transaction.metadata = {
+        groupId: transactionGroupId,
+        transactionType: '',
+        amount: 0,
+        name: '',
+      };
+
+      columns.forEach((columnName, index) => {
+        const cell = row.cell(index + 1);
+        const value = cell.value(); // 셀 값 가져오기
+
+        if (columnName === '거래일시' && value)
+          transaction.timestamp = this.parseDate(value.toString().trim());
+        if (columnName === '구분' && value)
+          transaction.metadata.transactionType = value.toString().trim();
+        if (columnName === '거래금액' && value)
+          transaction.metadata.amount = parseFloat(
+            value.toString().replace(/,/g, ''),
+          );
+        if (columnName === '내용' && value)
+          transaction.metadata.name = value.toString().trim();
+      });
+      transactions.push(transaction);
+    }
     return transactions;
   }
 

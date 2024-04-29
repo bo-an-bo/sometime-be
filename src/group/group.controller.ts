@@ -19,7 +19,8 @@ import { Event } from '../event/event.decorators';
 import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { UpdateMemberDto } from '../member/dto/update-member.dto';
 import { Member } from '../member/member.decorators';
-import { GetTransactionsPeriodDto } from '../transaction/dto/get-transaction-period.dto';
+import { GetTransactionsPeriodDto } from '../transaction/dto/get-transaction-period-dto';
+import { UploadTransactionDto } from '../transaction/dto/upload-transaction-dto';
 import { Transaction } from '../transaction/transaction.decorators';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -95,11 +96,17 @@ export class GroupController {
     description: '모임의 거래내역을 업로드합니다.',
   })
   @ApiFile('transactionFile')
+  @ApiBody({ type: UploadTransactionDto })
   uploadTransactionFile(
     @Param('groupId') groupId: string,
+    @Body() uploadTransactionDto: UploadTransactionDto,
     @UploadedFile() transactionExcel: Express.Multer.File,
   ) {
-    return this.groupService.uploadTransactionFile(groupId, transactionExcel);
+    return this.groupService.uploadTransactionFile(
+      groupId,
+      transactionExcel,
+      uploadTransactionDto.password, //이렇게하는게맞나..
+    );
   }
 
   @Get()

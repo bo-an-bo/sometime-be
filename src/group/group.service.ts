@@ -7,7 +7,7 @@ import { EventService } from '../event/event.service';
 import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { UpdateMemberDto } from '../member/dto/update-member.dto';
 import { MemberService } from '../member/member.service';
-import { GetTransactionsPeriodDto } from '../transaction/dto/get-transaction-period.dto';
+import { GetTransactionsPeriodDto } from '../transaction/dto/get-transaction-period-dto';
 import { TransactionService } from '../transaction/transaction.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -65,10 +65,12 @@ export class GroupService {
   async uploadTransactionFile(
     groupId: string,
     transactionExcel: Express.Multer.File,
+    password: string,
   ): Promise<void> {
     await this.transactionService.uploadTransactionFile(
       groupId,
       transactionExcel,
+      password,
     );
   }
 

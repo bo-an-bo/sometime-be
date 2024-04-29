@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 
-import { GetTransactionsPeriodDto } from './dto/get-transaction-period.dto';
+import { GetTransactionsPeriodDto } from './dto/get-transaction-period-dto';
 import { Transaction } from './entities/transaction.entity';
 import { TransactionInterface } from './interfaces/transaction.interface';
 
