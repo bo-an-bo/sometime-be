@@ -26,4 +26,7 @@ bootstrap().then(() => {
   console.log(
     `Dev server running on http://localhost:${process.env.SERVER_PORT}/dev`,
   );
+  console.log(
+    `Auth server running on http://localhost:${process.env.SERVER_PORT}/auth`,
+  );
 });
