@@ -9,7 +9,7 @@ import { MemberModule } from '../../member/member.module';
 import { TransactionModule } from '../../transaction/transaction.module';
 import { UserModule } from '../../user/user.module';
 
-export const swaggerConfig = (app: INestApplication<any>) => {
+export const swaggerConfig = (app: INestApplication) => {
   const config = new DocumentBuilder()
     .setTitle('sometime API')
     .addTag('Group', '모임 관련 API')
@@ -24,7 +24,7 @@ export const swaggerConfig = (app: INestApplication<any>) => {
   SwaggerModule.setup('api', app, document);
 };
 
-export const devSwaggerConfig = (app: INestApplication<any>) => {
+export const devSwaggerConfig = (app: INestApplication) => {
   const config = new DocumentBuilder()
     .setTitle('sometime API')
     .addTag('Debug', '개발용 API')
@@ -38,7 +38,7 @@ export const devSwaggerConfig = (app: INestApplication<any>) => {
   SwaggerModule.setup('dev', app, document);
 };
 
-export const authSwaggerConfig = (app: INestApplication<any>) => {
+export const authSwaggerConfig = (app: INestApplication) => {
   const authorizationUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_REST_API_KEY}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
   const config = new DocumentBuilder()
     .setTitle('sometime API')
@@ -49,7 +49,7 @@ export const authSwaggerConfig = (app: INestApplication<any>) => {
       flows: {
         authorizationCode: {
           authorizationUrl,
-          tokenUrl: 'https://kauth.kakao.com/oauth/token',
+          // tokenUrl: 'https://kauth.kakao.com/oauth/token',
           scopes: undefined,
         },
       },
