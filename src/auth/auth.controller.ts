@@ -40,4 +40,10 @@ export class AuthController {
   async kakaoLogout(@Query('kakaoToken') kakaoToken: string) {
     return this.authService.kakaoLogout(kakaoToken);
   }
+
+  @Post('kakao/unlink')
+  @ApiQuery({ name: 'kakaoToken', required: true })
+  async kakaoUnlink(@Query('kakaoToken') kakaoToken: string) {
+    return this.authService.kakaoUnlink(kakaoToken);
+  }
 }

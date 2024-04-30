@@ -50,13 +50,30 @@ export class AuthService {
       }),
     );
 
-    return { data };
+    return data;
   }
 
   async kakaoLogout(kakaoToken: string) {
     const { data } = await firstValueFrom(
       this.httpService.post(
         'https://kapi.kakao.com/v1/user/logout',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${kakaoToken}`,
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+          },
+        },
+      ),
+    );
+
+    return data;
+  }
+
+  async kakaoUnlink(kakaoToken: string) {
+    const { data } = await firstValueFrom(
+      this.httpService.post(
+        'https://kapi.kakao.com/v1/user/unlink',
         {},
         {
           headers: {
