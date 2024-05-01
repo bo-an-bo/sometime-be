@@ -106,7 +106,7 @@ export class GroupController {
     return this.groupService.uploadTransactionFile(
       groupId,
       transactionExcel,
-      uploadTransactionDto.password, //이렇게하는게맞나..
+      uploadTransactionDto.password,
     );
   }
 

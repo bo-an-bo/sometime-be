@@ -28,8 +28,8 @@ export class TransactionRepository {
       .find({
         'metadata.groupId': groupId,
         timestamp: {
-          $gte: new Date(startDate).toISOString(),
-          $lt: new Date(endDate).toISOString(),
+          $gte: new Date(startDate),
+          $lt: new Date(endDate),
         },
       })
       .exec();

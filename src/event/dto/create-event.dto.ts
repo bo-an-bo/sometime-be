@@ -27,7 +27,7 @@ export class CreateEventDto {
 
   @ApiProperty({
     description: '이벤트 입금 시작일',
-    example: new Date().toISOString(),
+    example: new Date(),
   })
   transactionStartDate: Date;
 
