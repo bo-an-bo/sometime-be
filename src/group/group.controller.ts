@@ -165,6 +165,19 @@ export class GroupController {
     return this.groupService.getTransactions(groupId);
   }
 
+  @Get(':groupId/transaction/event')
+  @Transaction()
+  @ApiOperation({
+    summary: '모임 이벤트 거래내역 조회',
+    description: '모임의 특정 이벤트의 거래내역을 조회합니다.',
+  })
+  getTransactionsByEvent(
+    @Param('groupId') groupId: string,
+    @Query('eventId') eventId: string,
+  ) {
+    return this.groupService.getTransactionsByEvent(groupId, eventId);
+  }
+
   @Get(':groupId/transaction/period')
   @Transaction()
   @ApiOperation({

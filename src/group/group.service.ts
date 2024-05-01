@@ -118,11 +118,29 @@ export class GroupService {
     return this.transactionService.getTransactions(groupId);
   }
 
+  async getTransactionsByEvent(groupId: string, eventId: string) {
+    //eventId로 eventTransaction 정보 가져오기
+    const event = await this.eventService.getOne(eventId);
+    // startTransactionDate, endTransactionDate로 변경 필요
+    const eventStart = event.startDate;
+    const eventEnd = event.endDate;
+
+    return this.transactionService.getTransactionsByPeriod(
+      groupId,
+      eventStart,
+      eventEnd,
+    );
+  }
+
   async getTransactionsByPeriod(
     groupId: string,
     periodDto: GetTransactionsPeriodDto,
   ) {
-    return this.transactionService.getTransactionsByPeriod(groupId, periodDto);
+    return this.transactionService.getTransactionsByPeriod(
+      groupId,
+      periodDto.startDate,
+      periodDto.endDate,
+    );
   }
 
   async update(

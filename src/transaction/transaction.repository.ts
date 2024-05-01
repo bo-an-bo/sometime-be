@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 
-import { GetTransactionsPeriodDto } from './dto/get-transaction-period-dto';
 import { Transaction } from './entities/transaction.entity';
 import { TransactionInterface } from './interfaces/transaction.interface';
 
@@ -22,14 +21,15 @@ export class TransactionRepository {
 
   async getTransactionsByPeriod(
     groupId: string,
-    periodDto: GetTransactionsPeriodDto,
+    startDate: Date,
+    endDate: Date,
   ): Promise<any> {
     return this.transactionModel
       .find({
         'metadata.groupId': groupId,
         timestamp: {
-          $gte: new Date(periodDto.startDate),
-          $lt: new Date(periodDto.endDate),
+          $gte: new Date(startDate),
+          $lt: new Date(endDate),
         },
       })
       .exec();

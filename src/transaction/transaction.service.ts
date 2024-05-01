@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
 import { ExcelService } from '../excel/excel.service';
-import { GetTransactionsPeriodDto } from './dto/get-transaction-period-dto';
 import { Transaction } from './entities/transaction.entity';
 import { TransactionRepository } from './transaction.repository';
 
@@ -36,11 +35,13 @@ export class TransactionService {
 
   async getTransactionsByPeriod(
     groupId: string,
-    periodDto: GetTransactionsPeriodDto,
+    startDate: Date,
+    endDate: Date,
   ) {
     return this.transactionRepository.getTransactionsByPeriod(
       groupId,
-      periodDto,
+      startDate,
+      endDate,
     );
   }
 }
