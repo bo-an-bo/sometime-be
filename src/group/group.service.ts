@@ -122,8 +122,8 @@ export class GroupService {
     //eventId로 eventTransaction 정보 가져오기
     const event = await this.eventService.getOne(eventId);
     // startTransactionDate, endTransactionDate로 변경 필요
-    const eventStart = event.startDate;
-    const eventEnd = event.endDate;
+    const eventStart = event.transactionStartDate;
+    const eventEnd = event.transactionEndDate;
 
     return this.transactionService.getTransactionsByPeriod(
       groupId,
