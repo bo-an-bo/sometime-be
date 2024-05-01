@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UploadedFile,
   UseFilters,
 } from '@nestjs/common';
@@ -164,7 +165,7 @@ export class GroupController {
     return this.groupService.getTransactions(groupId);
   }
 
-  @Post(':groupId/transaction/period')
+  @Get(':groupId/transaction/period')
   @Transaction()
   @ApiOperation({
     summary: '모임 거래내역 조회',
@@ -172,7 +173,7 @@ export class GroupController {
   })
   getTransactionsByPeriod(
     @Param('groupId') groupId: string,
-    @Body() getTransactionsPeriodDto: GetTransactionsPeriodDto,
+    @Query() getTransactionsPeriodDto: GetTransactionsPeriodDto,
   ) {
     return this.groupService.getTransactionsByPeriod(
       groupId,
