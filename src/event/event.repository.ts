@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 
 import { CreateEventDto } from './dto/create-event.dto';
 import { Event } from './entities/event.entity';
@@ -17,7 +17,9 @@ export class EventRepository {
   }
 
   findOne(eventId: string): Promise<Event> {
-    return this.eventModel.findById(eventId).exec() as Promise<Event>;
+    if (mongoose.Types.ObjectId.isValid(eventId)) {
+      return this.eventModel.findById(eventId).exec() as Promise<Event>;
+    }
   }
 
   update(eventId: string, event: Event): Promise<Event> {

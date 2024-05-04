@@ -4,6 +4,8 @@ export class Event {
   description: string;
   startDate: Date;
   endDate: Date;
+  transactionStartDate: Date;
+  transactionEndDate: Date;
   fee: number;
   attendees: string[];
 }

@@ -7,7 +7,7 @@ import { EventService } from '../event/event.service';
 import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { UpdateMemberDto } from '../member/dto/update-member.dto';
 import { MemberService } from '../member/member.service';
-import { GetTransactionsPeriodDto } from '../transaction/dto/get-transaction-period.dto';
+import { GetTransactionsPeriodDto } from '../transaction/dto/get-transaction-period-dto';
 import { TransactionService } from '../transaction/transaction.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -65,10 +65,12 @@ export class GroupService {
   async uploadTransactionFile(
     groupId: string,
     transactionExcel: Express.Multer.File,
+    password: string,
   ): Promise<void> {
     await this.transactionService.uploadTransactionFile(
       groupId,
       transactionExcel,
+      password,
     );
   }
 
@@ -116,11 +118,29 @@ export class GroupService {
     return this.transactionService.getTransactions(groupId);
   }
 
+  async getTransactionsByEvent(groupId: string, eventId: string) {
+    //eventId로 eventTransaction 정보 가져오기
+    const event = await this.eventService.getOne(eventId);
+    // startTransactionDate, endTransactionDate로 변경 필요
+    const eventStart = event.transactionStartDate;
+    const eventEnd = event.transactionEndDate;
+
+    return this.transactionService.getTransactionsByPeriod(
+      groupId,
+      eventStart,
+      eventEnd,
+    );
+  }
+
   async getTransactionsByPeriod(
     groupId: string,
     periodDto: GetTransactionsPeriodDto,
   ) {
-    return this.transactionService.getTransactionsByPeriod(groupId, periodDto);
+    return this.transactionService.getTransactionsByPeriod(
+      groupId,
+      periodDto.startDate,
+      periodDto.endDate,
+    );
   }
 
   async update(

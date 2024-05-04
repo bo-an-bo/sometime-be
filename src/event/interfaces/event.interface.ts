@@ -5,6 +5,8 @@ export interface EventInterface extends Document {
   description: string;
   startDate: Date;
   endDate: Date;
+  transactionStartDate: Date;
+  transactionEndDate: Date;
   fee: number;
   attendees: string[];
 }

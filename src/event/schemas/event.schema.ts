@@ -5,6 +5,8 @@ export const EventSchema = new Schema({
   description: String,
   startDate: Date,
   endDate: Date,
+  transactionStartDate: Date,
+  transactionEndDate: Date,
   fee: Number,
   attendees: { type: [String], default: [] },
 });

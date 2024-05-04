@@ -26,6 +26,18 @@ export class CreateEventDto {
   endDate: Date;
 
   @ApiProperty({
+    description: '이벤트 입금 시작일',
+    example: new Date(),
+  })
+  transactionStartDate: Date;
+
+  @ApiProperty({
+    description: '이벤트 입금 마감일',
+    example: new Date(),
+  })
+  transactionEndDate: Date;
+
+  @ApiProperty({
     description: '이벤트 참가비',
     example: 10000,
   })

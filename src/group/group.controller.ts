@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UploadedFile,
   UseFilters,
 } from '@nestjs/common';
@@ -19,7 +20,8 @@ import { Event } from '../event/event.decorators';
 import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { UpdateMemberDto } from '../member/dto/update-member.dto';
 import { Member } from '../member/member.decorators';
-import { GetTransactionsPeriodDto } from '../transaction/dto/get-transaction-period.dto';
+import { GetTransactionsPeriodDto } from '../transaction/dto/get-transaction-period-dto';
+import { UploadTransactionDto } from '../transaction/dto/upload-transaction-dto';
 import { Transaction } from '../transaction/transaction.decorators';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -95,11 +97,17 @@ export class GroupController {
     description: '모임의 거래내역을 업로드합니다.',
   })
   @ApiFile('transactionFile')
+  @ApiBody({ type: UploadTransactionDto })
   uploadTransactionFile(
     @Param('groupId') groupId: string,
+    @Body() uploadTransactionDto: UploadTransactionDto,
     @UploadedFile() transactionExcel: Express.Multer.File,
   ) {
-    return this.groupService.uploadTransactionFile(groupId, transactionExcel);
+    return this.groupService.uploadTransactionFile(
+      groupId,
+      transactionExcel,
+      uploadTransactionDto.password,
+    );
   }
 
   @Get()
@@ -157,7 +165,20 @@ export class GroupController {
     return this.groupService.getTransactions(groupId);
   }
 
-  @Post(':groupId/transaction/period')
+  @Get(':groupId/transaction/event')
+  @Transaction()
+  @ApiOperation({
+    summary: '모임 이벤트 거래내역 조회',
+    description: '모임의 특정 이벤트의 거래내역을 조회합니다.',
+  })
+  getTransactionsByEvent(
+    @Param('groupId') groupId: string,
+    @Query('eventId') eventId: string,
+  ) {
+    return this.groupService.getTransactionsByEvent(groupId, eventId);
+  }
+
+  @Get(':groupId/transaction/period')
   @Transaction()
   @ApiOperation({
     summary: '모임 거래내역 조회',
@@ -165,7 +186,7 @@ export class GroupController {
   })
   getTransactionsByPeriod(
     @Param('groupId') groupId: string,
-    @Body() getTransactionsPeriodDto: GetTransactionsPeriodDto,
+    @Query() getTransactionsPeriodDto: GetTransactionsPeriodDto,
   ) {
     return this.groupService.getTransactionsByPeriod(
       groupId,
