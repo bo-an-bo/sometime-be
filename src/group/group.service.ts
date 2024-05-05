@@ -8,6 +8,7 @@ import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { UpdateMemberDto } from '../member/dto/update-member.dto';
 import { MemberService } from '../member/member.service';
 import { GetTransactionsPeriodDto } from '../transaction/dto/get-transaction-period-dto';
+import { Transaction } from '../transaction/entities/transaction.entity';
 import { TransactionService } from '../transaction/transaction.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -119,16 +120,22 @@ export class GroupService {
   }
 
   async getTransactionsByEvent(groupId: string, eventId: string) {
-    //eventId로 eventTransaction 정보 가져오기
     const event = await this.eventService.getOne(eventId);
-    // startTransactionDate, endTransactionDate로 변경 필요
-    const eventStart = event.transactionStartDate;
-    const eventEnd = event.transactionEndDate;
+    const eventAttendees = await this.memberService.getMany(event.attendees);
 
-    return this.transactionService.getTransactionsByPeriod(
-      groupId,
-      eventStart,
-      eventEnd,
+    // 이벤트 입금기한에 해당하는 거래내역
+    const eventTransactions: Transaction[] =
+      await this.transactionService.getTransactionsByEvent(
+        groupId,
+        event.fee,
+        event.transactionStartDate,
+        event.transactionEndDate,
+      );
+
+    // 이벤트의 멤버 명단과 거래내역 비교
+    return this.transactionService.compareEventTransactions(
+      eventAttendees,
+      eventTransactions,
     );
   }
 
