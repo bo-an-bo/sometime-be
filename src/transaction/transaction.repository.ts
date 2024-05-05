@@ -52,4 +52,8 @@ export class TransactionRepository {
       })
       .exec();
   }
+
+  async deleteMany(groupId: string) {
+    return this.transactionModel.deleteMany({ 'metadata.groupId': groupId });
+  }
 }

@@ -13,22 +13,19 @@ export class TransactionService {
     private readonly excelService: ExcelService,
   ) {}
 
-  createMany(transactions: Transaction[]): Promise<void> {
-    return this.transactionRepository.createMany(transactions);
-  }
-
   async uploadTransactionFile(
     groupId: string,
     transactionFile: Express.Multer.File,
     password: string,
   ): Promise<void> {
+    await this.transactionRepository.deleteMany(groupId);
     const transactions: Transaction[] =
       await this.excelService.convertTransactionFileToTransactionArr(
         groupId,
         transactionFile,
         password,
       );
-    await this.createMany(transactions);
+    await this.transactionRepository.createMany(transactions);
   }
 
   async getTransactions(groupId: string) {
@@ -53,7 +50,7 @@ export class TransactionService {
     startDate: Date,
     endDate: Date,
   ) {
-    return this.transactionRepository.getTransactionsByEvent(
+    return await this.transactionRepository.getTransactionsByEvent(
       groupId,
       fee,
       startDate,
