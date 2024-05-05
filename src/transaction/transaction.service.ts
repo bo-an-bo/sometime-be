@@ -62,8 +62,10 @@ export class TransactionService {
     members: Member[],
     transactions: Transaction[],
   ) {
+    // 멤버 이름과 거래내역 이름 비교
     const tName = new Set(transactions.map((t) => t.metadata.name));
     const compareList: CompareEventTransactionDTO[] = [];
+    // 멤버 이름 기준으로 입금 판단
     members.forEach((member) => {
       compareList.push({
         name: member.name,
