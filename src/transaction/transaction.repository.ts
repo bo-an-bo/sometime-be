@@ -35,24 +35,6 @@ export class TransactionRepository {
       .exec();
   }
 
-  async getTransactionsByEvent(
-    groupId: string,
-    fee: number,
-    startDate: Date,
-    endDate: Date,
-  ): Promise<any> {
-    return this.transactionModel
-      .find({
-        'metadata.groupId': groupId,
-        'metadata.amount': fee,
-        timestamp: {
-          $gte: new Date(startDate),
-          $lt: new Date(endDate),
-        },
-      })
-      .exec();
-  }
-
   async deleteMany(groupId: string) {
     return this.transactionModel.deleteMany({ 'metadata.groupId': groupId });
   }

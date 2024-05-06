@@ -27,6 +27,10 @@ export class EventService {
     return event;
   }
 
+  async compareEventTransactions(groupId: string, eventId: string) {
+    return await this.eventRepository.compareTransaction(groupId, eventId);
+  }
+
   delete(eventId: string) {
     return this.eventRepository.delete(eventId);
   }

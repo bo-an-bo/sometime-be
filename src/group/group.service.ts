@@ -8,7 +8,6 @@ import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { UpdateMemberDto } from '../member/dto/update-member.dto';
 import { MemberService } from '../member/member.service';
 import { GetTransactionsPeriodDto } from '../transaction/dto/get-transaction-period-dto';
-import { Transaction } from '../transaction/entities/transaction.entity';
 import { TransactionService } from '../transaction/transaction.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -120,23 +119,7 @@ export class GroupService {
   }
 
   async getTransactionsByEvent(groupId: string, eventId: string) {
-    const event = await this.eventService.getOne(eventId);
-    const eventAttendees = await this.memberService.getMany(event.attendees);
-
-    // 이벤트 입금기한에 해당하는 거래내역
-    const eventTransactions: Transaction[] =
-      await this.transactionService.getTransactionsByEvent(
-        groupId,
-        event.fee,
-        event.transactionStartDate,
-        event.transactionEndDate,
-      );
-
-    // 이벤트의 멤버 명단과 거래내역 비교
-    return this.transactionService.compareEventTransactions(
-      eventAttendees,
-      eventTransactions,
-    );
+    return this.eventService.compareEventTransactions(groupId, eventId);
   }
 
   async getTransactionsByPeriod(

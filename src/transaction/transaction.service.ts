@@ -44,20 +44,6 @@ export class TransactionService {
     );
   }
 
-  async getTransactionsByEvent(
-    groupId: string,
-    fee: number,
-    startDate: Date,
-    endDate: Date,
-  ) {
-    return await this.transactionRepository.getTransactionsByEvent(
-      groupId,
-      fee,
-      startDate,
-      endDate,
-    );
-  }
-
   async compareEventTransactions(
     members: Member[],
     transactions: Transaction[],
