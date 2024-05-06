@@ -21,10 +21,6 @@ export class MemberRepository {
     return this.memberModel.findById(memberId).exec() as Promise<Member>;
   }
 
-  findMany(memberIds: string[]): Promise<Member[]> {
-    return this.memberModel.find({ _id: { $in: memberIds } });
-  }
-
   update(memberId: string, updateMemberDto: UpdateMemberDto): Promise<Member> {
     return this.memberModel
       .findByIdAndUpdate(memberId, updateMemberDto, { new: true })

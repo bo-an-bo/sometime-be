@@ -28,10 +28,6 @@ export class MemberService {
     return await this.memberRepository.findOne(memberId);
   }
 
-  async getMany(memberIds: string[]) {
-    return await this.memberRepository.findMany(memberIds);
-  }
-
   async update(
     memberId: string,
     updateMemberDto: UpdateMemberDto,
