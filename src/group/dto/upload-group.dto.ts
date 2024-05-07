@@ -9,5 +9,5 @@ export class UploadGroupDto extends CreateGroupDto {
     type: 'file',
     format: 'binary',
   })
-  readonly memberExcel: Express.Multer.File | undefined;
+  readonly memberFile: Express.Multer.File | undefined;
 }

@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs/axios": "^3.0.2",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.1",
     "@nestjs/core": "^10.0.0",
@@ -27,6 +28,7 @@
     "@nestjs/swagger": "^7.3.1",
     "@types/xlsx-populate": "github:JanLoebel/types-xlsx-populate",
     "@typescript-eslint/typescript-estree": "^7.5.0",
+    "axios": "^1.6.8",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "excel4node": "^1.8.2",
