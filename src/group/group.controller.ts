@@ -76,6 +76,21 @@ export class GroupController {
     return this.groupService.addEvent(groupId, createEventDto);
   }
 
+  @Post(':groupId/event/:eventId/member')
+  @Event()
+  @ApiOperation({
+    summary: '모임 이벤트에 참여 회원 추가',
+    description: '특정 모임의 특정 이벤트에 참여하는 회원 목록을 추가합니다.',
+  })
+  @ApiBody({ type: [String] })
+  addMemberToEvent(
+    @Param('groupId') groupId: string,
+    @Param('eventId') eventId: string,
+    @Body() memberIds: string[],
+  ) {
+    return this.groupService.addMemberToEvent(groupId, eventId, memberIds);
+  }
+
   @Post(':groupId/member/excel')
   @Member()
   @ApiOperation({
@@ -165,19 +180,6 @@ export class GroupController {
     return this.groupService.getTransactions(groupId);
   }
 
-  @Get(':groupId/transaction/event')
-  @Transaction()
-  @ApiOperation({
-    summary: '모임 이벤트 거래내역 조회',
-    description: '모임의 특정 이벤트의 거래내역을 조회합니다.',
-  })
-  getTransactionsByEvent(
-    @Param('groupId') groupId: string,
-    @Query('eventId') eventId: string,
-  ) {
-    return this.groupService.getTransactionsByEvent(groupId, eventId);
-  }
-
   @Get(':groupId/transaction/period')
   @Transaction()
   @ApiOperation({
@@ -192,6 +194,30 @@ export class GroupController {
       groupId,
       getTransactionsPeriodDto,
     );
+  }
+
+  @Get(':groupId/event/:eventId/transaction')
+  @Event()
+  @Transaction()
+  @ApiOperation({
+    summary: '모임 이벤트별 거래내역 조회',
+    description: '모임의 특정 이벤트의 거래내역을 조회합니다.',
+  })
+  @ApiParam({
+    name: 'groupId',
+    required: true,
+    description: '모임 ID',
+  })
+  @ApiParam({
+    name: 'eventId',
+    required: true,
+    description: '이벤트 ID',
+  })
+  getTransactionsByEvent(
+    @Param('groupId') groupId: string,
+    @Param('eventId') eventId: string,
+  ) {
+    return this.groupService.getTransactionsByEvent(groupId, eventId);
   }
 
   @Patch(':groupId')

@@ -51,6 +51,26 @@ export class GroupService {
     return group;
   }
 
+  async addMemberToEvent(
+    groupId: string,
+    eventId: string,
+    memberIds: string[],
+  ) {
+    const group = await this.groupRepository.findOne(groupId);
+    const event = await this.eventService.getOne(eventId);
+
+    for (const member of memberIds) {
+      if (!group.members.find((m) => m === member)) {
+        throw new Error('멤버가 존재하지 않습니다.');
+      }
+      event.attendees.push(member);
+    }
+
+    await this.eventService.update(eventId, event);
+
+    return event;
+  }
+
   async uploadMemberFile(
     groupId: string,
     memberExcel: Express.Multer.File,
