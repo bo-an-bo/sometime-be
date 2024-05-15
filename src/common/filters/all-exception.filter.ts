@@ -7,6 +7,8 @@ import {
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 
+import { webhook } from '../configs/discord-webhook.config';
+
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
@@ -23,12 +25,20 @@ export class AllExceptionsFilter implements ExceptionFilter {
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const responseBody = {
-      statusCode: httpStatus,
-      timestamp: new Date().toISOString(),
-      path: httpAdapter.getRequestUrl(ctx.getRequest()),
-    };
+    const statusCode = httpStatus.toString();
+    const path = httpAdapter.getRequestUrl(ctx.getRequest());
+    const message = exception instanceof Error ? exception.message : exception;
+    const timestamp = new Date().toISOString();
 
-    httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
+    webhook.error(path, timestamp, message.toString());
+
+    httpAdapter.reply(
+      ctx.getResponse(),
+      {
+        statusCode,
+        path,
+      },
+      httpStatus,
+    );
   }
 }
