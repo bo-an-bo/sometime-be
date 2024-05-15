@@ -205,7 +205,7 @@ export class GroupService {
     const groupMembers = group.members;
 
     group.members = groupMembers.filter(
-      (member) => !memberIds.find((id) => id === member),
+      (member) => !memberIds.includes(member),
     );
     this.memberService.deleteMany(memberIds);
 
