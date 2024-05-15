@@ -97,13 +97,14 @@ export class GroupService {
   async addEvent(
     groupId: string,
     createEventDto: CreateEventDto,
-  ): Promise<Group> {
+  ): Promise<object> {
     const group = await this.groupRepository.findOne(groupId);
+    const eventId = await this.eventService.create(createEventDto);
 
-    group.events.push(await this.eventService.create(createEventDto));
+    group.events.push(eventId);
 
     await this.groupRepository.update(groupId, group);
-    return group;
+    return { eventId };
   }
 
   async getAll(): Promise<Group[]> {
