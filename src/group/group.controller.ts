@@ -8,12 +8,10 @@ import {
   Post,
   Query,
   UploadedFile,
-  UseFilters,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam } from '@nestjs/swagger';
 
 import { ApiFile } from '../common/decorators/api-file.decorator';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
 import { CreateEventDto } from '../event/dto/create-event.dto';
 import { UpdateEventDto } from '../event/dto/update-event.dto';
 import { Event } from '../event/event.decorators';
@@ -30,7 +28,6 @@ import { Group } from './group.decorators';
 import { GroupService } from './group.service';
 
 @Controller('group')
-@UseFilters(HttpExceptionFilter)
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
