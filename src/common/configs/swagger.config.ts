@@ -10,6 +10,12 @@ import { TransactionModule } from '../../transaction/transaction.module';
 import { UserModule } from '../../user/user.module';
 
 export const swaggerConfig = (app: INestApplication) => {
+  apiSwaggerConfig(app);
+  devSwaggerConfig(app);
+  authSwaggerConfig(app);
+};
+
+const apiSwaggerConfig = (app: INestApplication) => {
   const config = new DocumentBuilder()
     .setTitle('sometime API')
     .addTag('Group', '모임 관련 API')
@@ -24,7 +30,7 @@ export const swaggerConfig = (app: INestApplication) => {
   SwaggerModule.setup('api', app, document);
 };
 
-export const devSwaggerConfig = (app: INestApplication) => {
+const devSwaggerConfig = (app: INestApplication) => {
   const config = new DocumentBuilder()
     .setTitle('sometime API')
     .addTag('Debug', '개발용 API')
@@ -38,7 +44,7 @@ export const devSwaggerConfig = (app: INestApplication) => {
   SwaggerModule.setup('dev', app, document);
 };
 
-export const authSwaggerConfig = (app: INestApplication) => {
+const authSwaggerConfig = (app: INestApplication) => {
   const authorizationUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_REST_API_KEY}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code&prompt=select_account`;
   const config = new DocumentBuilder()
     .setTitle('sometime API')
