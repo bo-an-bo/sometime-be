@@ -76,6 +76,7 @@ export class EventRepository {
         $project: {
           _id: 0,
           member: '$member_info',
+          timestamp: '$transaction_info.timestamp',
           isPaid: 1,
         },
       },
