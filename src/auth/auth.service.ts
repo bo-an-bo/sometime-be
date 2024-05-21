@@ -40,6 +40,19 @@ export class AuthService {
     return data['access_token'];
   }
 
+  async kakaoTokenInfo(kakaoToken: string) {
+    const { data } = await firstValueFrom(
+      this.httpService.get('https://kapi.kakao.com/v1/user/access_token_info', {
+        headers: {
+          Authorization: `Bearer ${kakaoToken}`,
+          'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+        },
+      }),
+    );
+
+    return data;
+  }
+
   async kakaoLogin(kakaoToken: string) {
     const { data } = await firstValueFrom(
       this.httpService.get('https://kapi.kakao.com/v2/user/me', {
