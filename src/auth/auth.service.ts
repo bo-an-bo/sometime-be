@@ -1,13 +1,18 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { firstValueFrom } from 'rxjs';
+
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
   kakaoCallback(
@@ -98,5 +103,27 @@ export class AuthService {
     );
 
     return data;
+  }
+
+  async login(kakaoToken: string) {
+    const kakaoInfo = await this.kakaoLogin(kakaoToken);
+
+    const kakaoId = kakaoInfo.id;
+    const name = kakaoInfo.kakao_account.profile.nickname;
+    const email = kakaoInfo.kakao_account.email;
+
+    let user = await this.userService.findOneByKakaoId(kakaoId);
+    if (!user) {
+      user = await this.userService.create({
+        kakaoId,
+        name,
+        email,
+      });
+    }
+
+    const payload = { sub: user.id, name: user.name, iat: Date.now() };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 }

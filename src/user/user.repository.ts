@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 
 import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './entities/user.entity';
 import { UserInterface } from './interfaces/user.interfaces';
 
 @Injectable()
@@ -12,25 +13,25 @@ export class UserRepository {
   ) {}
 
   create(createUserDto: CreateUserDto) {
-    return this.userModel.create(createUserDto);
+    return this.userModel.create(createUserDto) as Promise<User>;
   }
 
   findAll() {
-    return this.userModel.find().exec();
+    return this.userModel.find().exec() as Promise<User[]>;
   }
 
-  findOne(userId: string) {
-    return this.userModel.findById(userId).exec();
+  findOne(userId: string): Promise<User> {
+    return this.userModel.findById(userId).exec() as Promise<User>;
   }
 
   findOneByKakaoId(kakaoId: string) {
-    return this.userModel.findOne({ kakaoId }).exec();
+    return this.userModel.findOne({ kakaoId }).exec() as Promise<User>;
   }
 
   update(userId: string, updateUserDto: CreateUserDto) {
     return this.userModel
       .findByIdAndUpdate(userId, updateUserDto, { new: true })
-      .exec();
+      .exec() as Promise<User>;
   }
 
   delete(userId: string) {
