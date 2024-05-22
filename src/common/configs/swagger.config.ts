@@ -60,6 +60,13 @@ const authSwaggerConfig = (app: INestApplication) => {
         },
       },
     })
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+      },
+      'Authorization',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {
