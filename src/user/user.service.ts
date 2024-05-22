@@ -20,6 +20,10 @@ export class UserService {
     return await this.userRepository.findOne(userId);
   }
 
+  async findOneByKakaoId(kakaoId: string) {
+    return await this.userRepository.findOneByKakaoId(kakaoId);
+  }
+
   async update(userId: string, updateUserDto: UpdateUserDto) {
     return { userId, updateUserDto };
   }

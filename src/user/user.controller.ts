@@ -33,6 +33,11 @@ export class UserController {
     return this.userService.findOne(userId);
   }
 
+  @Get('kakao/:kakaoId')
+  findOneByKakaoId(@Param('kakaoId') kakaoId: string) {
+    return this.userService.findOneByKakaoId(kakaoId);
+  }
+
   @Patch(':userId')
   update(
     @Param('userId') userId: string,

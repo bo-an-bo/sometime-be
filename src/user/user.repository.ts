@@ -23,6 +23,10 @@ export class UserRepository {
     return this.userModel.findById(userId).exec();
   }
 
+  findOneByKakaoId(kakaoId: string) {
+    return this.userModel.findOne({ kakaoId }).exec();
+  }
+
   update(userId: string, updateUserDto: CreateUserDto) {
     return this.userModel
       .findByIdAndUpdate(userId, updateUserDto, { new: true })
