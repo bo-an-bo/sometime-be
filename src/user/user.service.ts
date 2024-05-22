@@ -13,18 +13,18 @@ export class UserService {
   }
 
   async findAll() {
-    return `This action returns all user`;
+    return await this.userRepository.findAll();
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(userId: string) {
+    return await this.userRepository.findOne(userId);
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    return { id, updateUserDto };
+  async update(userId: string, updateUserDto: UpdateUserDto) {
+    return { userId, updateUserDto };
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(userId: string) {
+    return this.userRepository.delete(userId);
   }
 }
