@@ -34,13 +34,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const timestamp = new Date().toISOString();
 
     webhook.error(
-      path,
+      `[${request.method}] ${path}`,
       timestamp,
-      'request body: ' +
-        request.body.toString() +
-        '\n' +
-        'error message: ' +
-        message.toString(),
+      'error message: ' + message.toString(),
     );
 
     httpAdapter.reply(
