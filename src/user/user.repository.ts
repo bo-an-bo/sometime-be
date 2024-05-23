@@ -34,7 +34,15 @@ export class UserRepository {
       .exec() as Promise<User>;
   }
 
+  deleteAll() {
+    this.userModel.deleteMany().exec().then();
+  }
+
   delete(userId: string) {
     this.userModel.findByIdAndDelete(userId).exec().then();
+  }
+
+  deleteOneByKakaoId(kakaoId: string) {
+    this.userModel.findOneAndDelete({ kakaoId }).exec().then();
   }
 }

@@ -58,4 +58,9 @@ export class AuthController {
   async login(@Query('kakaoToken') kakaoToken: string) {
     return this.authService.login(kakaoToken);
   }
+
+  @Get('signout')
+  async signout(@Query('kakaoToken') kakaoToken: string) {
+    return this.authService.signout(kakaoToken);
+  }
 }

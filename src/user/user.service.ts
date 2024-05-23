@@ -29,7 +29,15 @@ export class UserService {
     return { userId, updateUserDto };
   }
 
+  removeAll() {
+    return this.userRepository.deleteAll();
+  }
+
   remove(userId: string) {
     return this.userRepository.delete(userId);
+  }
+
+  removeOneByKakaoId(kakaoId: string) {
+    return this.userRepository.deleteOneByKakaoId(kakaoId);
   }
 }

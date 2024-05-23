@@ -126,4 +126,13 @@ export class AuthService {
       access_token: await this.jwtService.signAsync(payload),
     };
   }
+
+  async signout(kakaoToken: string) {
+    const { kakaoId } = await this.kakaoTokenInfo(kakaoToken);
+
+    this.userService.removeOneByKakaoId(kakaoId);
+    await this.kakaoUnlink(kakaoToken);
+
+    return { message: 'Successfully signed out' };
+  }
 }
