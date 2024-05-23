@@ -124,9 +124,16 @@ export class GroupService {
   }
 
   async getMembers(groupId: string) {
-    return this.groupRepository.findOne(groupId).then((group) => {
-      return this.getAllMembers(group.members);
-    });
+    const group = await this.groupRepository.findOne(groupId);
+    const members = await this.getAllMembers(group.members);
+    const memberInfo = [];
+    if (group.members.length > 0) {
+      for (const info in members[0].memberInfo) {
+        memberInfo.push(info);
+      }
+    }
+
+    return { memberInfo, members };
   }
 
   async getEvents(groupId: string) {
