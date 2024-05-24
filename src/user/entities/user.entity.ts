@@ -3,4 +3,9 @@ export class User {
   kakaoId: number;
   name: string;
   email: string;
+  auth: {
+    owner: string[];
+    editor: string[];
+    viewer: string[];
+  };
 }

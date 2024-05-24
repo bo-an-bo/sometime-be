@@ -29,7 +29,7 @@ export class GroupService {
     memberExcel: Express.Multer.File,
   ): Promise<Group> {
     const group: Group = createGroupDto as Group;
-    group.manager = userId;
+    group.owner = userId;
 
     if (memberExcel) {
       group.members = await this.memberService.uploadMemberFile(memberExcel);
