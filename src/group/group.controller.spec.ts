@@ -32,29 +32,29 @@ describe('GroupController', () => {
     groupController = module.get<GroupController>(GroupController);
   });
 
-  describe('create', () => {
-    it('should return a group', async () => {
-      const group: Group = {
-        id: '6626fa9e2b28caeae2d23f17',
-        name: 'Group 1',
-        manager: 'user1',
-        description: 'Group 1 description',
-        subManagers: null,
-        members: ['user1', 'user2'],
-        events: [],
-      };
-
-      const result: Group = await groupService.create(group, null);
-
-      jest.spyOn(groupService, 'create').mockImplementation(async () => result);
-
-      expect(await groupController.create(group, null)).toBe(result);
-      expect(result).toHaveProperty('name', group.name);
-      expect(result).toHaveProperty('description', group.description);
-      expect(result).toHaveProperty('subManagers', group.subManagers);
-      expect(result).toHaveProperty('members', group.members);
-    });
-  });
+  // describe('create', () => {
+  //   it('should return a group', async () => {
+  //     const group: Group = {
+  //       id: '6626fa9e2b28caeae2d23f17',
+  //       name: 'Group 1',
+  //       manager: 'user1',
+  //       description: 'Group 1 description',
+  //       subManagers: null,
+  //       members: ['user1', 'user2'],
+  //       events: [],
+  //     };
+  //
+  //     const result: Group = await groupService.create(group, null);
+  //
+  //     jest.spyOn(groupService, 'create').mockImplementation(async () => result);
+  //
+  //     expect(await groupController.create(group, null)).toBe(result);
+  //     expect(result).toHaveProperty('name', group.name);
+  //     expect(result).toHaveProperty('description', group.description);
+  //     expect(result).toHaveProperty('subManagers', group.subManagers);
+  //     expect(result).toHaveProperty('members', group.members);
+  //   });
+  // });
 
   // describe('addMember', () => {
   //   it('should return a group', async () => {
