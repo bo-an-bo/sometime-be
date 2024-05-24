@@ -128,9 +128,9 @@ export class AuthService {
   }
 
   async signout(kakaoToken: string) {
-    const { kakaoId } = await this.kakaoTokenInfo(kakaoToken);
+    const { id } = await this.kakaoTokenInfo(kakaoToken);
 
-    this.userService.removeOneByKakaoId(kakaoId);
+    this.userService.removeOneByKakaoId(id);
     await this.kakaoUnlink(kakaoToken);
 
     return { message: 'Successfully signed out' };
