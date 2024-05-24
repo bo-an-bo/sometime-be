@@ -35,7 +35,10 @@ export class UserController {
   @ApiBearerAuth('Authorization')
   @Get('me')
   me(@Request() req: any) {
-    return req.user;
+    return {
+      user: req.user,
+      userId: req.userId,
+    };
   }
 
   @Get(':userId')

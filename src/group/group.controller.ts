@@ -8,6 +8,7 @@ import {
   Post,
   Query,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -16,6 +17,7 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 
+import { AuthGuard } from '../auth/auth.guard';
 import { ApiFile } from '../common/decorators/api-file.decorator';
 import { CreateEventDto } from '../event/dto/create-event.dto';
 import { UpdateEventDto } from '../event/dto/update-event.dto';
@@ -34,6 +36,7 @@ import { GroupService } from './group.service';
 
 @Controller('group')
 @ApiBearerAuth('Authorization')
+@UseGuards(AuthGuard)
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
