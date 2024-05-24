@@ -18,7 +18,7 @@ export class UserController {
 
   @Get()
   findAll() {
-    return this.userService.findAll();
+    return this.userService.getAll();
   }
 
   @UseGuards(AuthGuard)
@@ -33,12 +33,12 @@ export class UserController {
 
   @Get(':userId')
   findOne(@Param('userId') userId: string) {
-    return this.userService.findOne(userId);
+    return this.userService.getOne(userId);
   }
 
   @Get('kakao/:kakaoId')
   findOneByKakaoId(@Param('kakaoId') kakaoId: string) {
-    return this.userService.findOneByKakaoId(kakaoId);
+    return this.userService.getOneByKakaoId(kakaoId);
   }
 
   @Patch(':userId')
@@ -48,11 +48,11 @@ export class UserController {
 
   @Delete()
   removeAll() {
-    return this.userService.removeAll();
+    return this.userService.deleteAll();
   }
 
   @Delete(':userId')
   remove(@Param('userId') userId: string) {
-    return this.userService.remove(userId);
+    return this.userService.delete(userId);
   }
 }

@@ -112,7 +112,7 @@ export class AuthService {
     const name = kakaoInfo.kakao_account.profile.nickname;
     const email = kakaoInfo.kakao_account.email;
 
-    let user = await this.userService.findOneByKakaoId(kakaoId);
+    let user = await this.userService.getOneByKakaoId(kakaoId);
     if (!user) {
       user = await this.userService.create({
         kakaoId,
@@ -130,7 +130,7 @@ export class AuthService {
   async signout(kakaoToken: string) {
     const { id } = await this.kakaoTokenInfo(kakaoToken);
 
-    this.userService.removeOneByKakaoId(id);
+    this.userService.deleteOneByKakaoId(id);
     await this.kakaoUnlink(kakaoToken);
 
     return { message: 'Successfully signed out' };
