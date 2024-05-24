@@ -4,9 +4,9 @@ export class Group {
   description: string;
 
   auth: {
-    owner: string;
-    editors: string[];
-    viewers: string[];
+    owner: any;
+    editors: any[];
+    viewers: any[];
   };
 
   members: any[];

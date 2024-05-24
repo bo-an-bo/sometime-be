@@ -9,6 +9,7 @@ import { UpdateMemberDto } from '../member/dto/update-member.dto';
 import { MemberService } from '../member/member.service';
 import { GetTransactionsPeriodDto } from '../transaction/dto/get-transaction-period-dto';
 import { TransactionService } from '../transaction/transaction.service';
+import { UserService } from '../user/user.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { Group } from './entities/group.entity';
@@ -21,17 +22,25 @@ export class GroupService {
     private readonly memberService: MemberService,
     private readonly eventService: EventService,
     private readonly transactionService: TransactionService,
+    private readonly userService: UserService,
   ) {}
 
   async create(userId: string, createGroupDto: CreateGroupDto, memberExcel: Express.Multer.File): Promise<Group> {
     const group: Group = createGroupDto as Group;
-    group.owner = userId;
+    group.auth = {
+      owner: userId,
+      editors: [],
+      viewers: [],
+    };
 
     if (memberExcel) {
       group.members = await this.memberService.uploadMemberFile(memberExcel);
     }
 
-    return await this.groupRepository.create(group);
+    const createdGroup = await this.groupRepository.create(group);
+    await this.userService.pushOwner(userId, createdGroup.id);
+
+    return createdGroup;
   }
 
   async addMember(groupId: string, createMemberDto: CreateMemberDto[]): Promise<Group> {
@@ -85,7 +94,10 @@ export class GroupService {
   }
 
   async getAll(userId: string): Promise<Group[]> {
-    return await this.groupRepository.findAll();
+    const user = await this.userService.getOne(userId);
+    const groupIds = user.auth.owner.concat(user.auth.editor).concat(user.auth.viewer);
+
+    return await this.groupRepository.findByIds(groupIds);
   }
 
   async getOne(groupId: string): Promise<Group> {

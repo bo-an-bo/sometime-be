@@ -13,15 +13,15 @@ export class UserService {
     return await this.userRepository.create(createUserDto);
   }
 
-  async findAll() {
+  async getAll() {
     return await this.userRepository.findAll();
   }
 
-  async findOne(userId: string): Promise<User> {
+  async getOne(userId: string): Promise<User> {
     return await this.userRepository.findOne(userId);
   }
 
-  async findOneByKakaoId(kakaoId: string) {
+  async getOneByKakaoId(kakaoId: string) {
     return await this.userRepository.findOneByKakaoId(kakaoId);
   }
 
@@ -29,15 +29,51 @@ export class UserService {
     return { userId, updateUserDto };
   }
 
-  removeAll() {
+  async pushOwner(userId: string, groupId: string) {
+    const user = await this.userRepository.findOne(userId);
+    user.auth.owner.push(groupId);
+    return this.userRepository.update(userId, user);
+  }
+
+  async pushEditor(userId: string, groupId: string) {
+    const user = await this.userRepository.findOne(userId);
+    user.auth.editor.push(groupId);
+    return this.userRepository.update(userId, user);
+  }
+
+  async pushViewer(userId: string, groupId: string) {
+    const user = await this.userRepository.findOne(userId);
+    user.auth.viewer.push(groupId);
+    return this.userRepository.update(userId, user);
+  }
+
+  async popOwner(userId: string, groupId: string) {
+    const user = await this.userRepository.findOne(userId);
+    user.auth.owner = user.auth.owner.filter((id) => id !== groupId);
+    return this.userRepository.update(userId, user);
+  }
+
+  async popEditor(userId: string, groupId: string) {
+    const user = await this.userRepository.findOne(userId);
+    user.auth.editor = user.auth.editor.filter((id) => id !== groupId);
+    return this.userRepository.update(userId, user);
+  }
+
+  async popViewer(userId: string, groupId: string) {
+    const user = await this.userRepository.findOne(userId);
+    user.auth.viewer = user.auth.viewer.filter((id) => id !== groupId);
+    return this.userRepository.update(userId, user);
+  }
+
+  deleteAll() {
     return this.userRepository.deleteAll();
   }
 
-  remove(userId: string) {
+  delete(userId: string) {
     return this.userRepository.delete(userId);
   }
 
-  removeOneByKakaoId(kakaoId: string) {
+  deleteOneByKakaoId(kakaoId: string) {
     return this.userRepository.deleteOneByKakaoId(kakaoId);
   }
 }
