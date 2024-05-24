@@ -1,10 +1,4 @@
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { Request } from 'express';
 
@@ -21,10 +15,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const ctx = host.switchToHttp();
 
-    const httpStatus =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+    const httpStatus = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
     const request = ctx.getRequest<Request>();
 
@@ -33,11 +24,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const message = exception instanceof Error ? exception.message : exception;
     const timestamp = new Date().toISOString();
 
-    webhook.error(
-      `[${request.method}] ${path}`,
-      timestamp,
-      'error message: ' + message.toString(),
-    );
+    webhook.error(`[${request.method}] ${path}`, timestamp, 'error message: ' + message.toString());
 
     httpAdapter.reply(
       ctx.getResponse(),

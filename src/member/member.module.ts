@@ -8,12 +8,7 @@ import { MemberService } from './member.service';
 
 @Module({
   imports: [DatabaseModule],
-  providers: [
-    MemberService,
-    ...memberProviders,
-    MemberRepository,
-    ExcelService,
-  ],
+  providers: [MemberService, ...memberProviders, MemberRepository, ExcelService],
   exports: [MemberService],
 })
 export class MemberModule {}

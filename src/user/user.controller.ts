@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Request, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { AuthGuard } from '../auth/auth.guard';
@@ -52,10 +42,7 @@ export class UserController {
   }
 
   @Patch(':userId')
-  update(
-    @Param('userId') userId: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
+  update(@Param('userId') userId: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(userId, updateUserDto);
   }
 

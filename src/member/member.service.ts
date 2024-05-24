@@ -18,8 +18,7 @@ export class MemberService {
   }
 
   async uploadMemberFile(excel: Express.Multer.File): Promise<string[]> {
-    const members: Member[] =
-      await this.excelService.convertMemberExcelToMembers(excel);
+    const members: Member[] = await this.excelService.convertMemberExcelToMembers(excel);
 
     return await this.createGroupMembers(members);
   }
@@ -28,10 +27,7 @@ export class MemberService {
     return await this.memberRepository.findOne(memberId);
   }
 
-  async update(
-    memberId: string,
-    updateMemberDto: UpdateMemberDto,
-  ): Promise<Member> {
+  async update(memberId: string, updateMemberDto: UpdateMemberDto): Promise<Member> {
     return (await this.memberRepository.update(memberId, {
       name: updateMemberDto.name,
       memberInfo: updateMemberDto.memberInfo,

@@ -10,11 +10,6 @@ import { DebugService } from './debug.service';
 @Module({
   imports: [DatabaseModule],
   controllers: [DebugController],
-  providers: [
-    DebugService,
-    ...groupProviders,
-    ...memberProviders,
-    ...eventProviders,
-  ],
+  providers: [DebugService, ...groupProviders, ...memberProviders, ...eventProviders],
 })
 export class DebugModule {}

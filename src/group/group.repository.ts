@@ -21,14 +21,16 @@ export class GroupRepository {
     return this.groupModel.find().exec() as Promise<Group[]>;
   }
 
+  findByIds(groupIds: string[]): Promise<Group[]> {
+    return this.groupModel.find({ _id: { $in: groupIds } }).exec() as Promise<Group[]>;
+  }
+
   findOne(groupId: string): Promise<Group> {
     return this.groupModel.findById(groupId).exec() as Promise<Group>;
   }
 
   update(groupId: string, updateGroupDto: UpdateGroupDto): Promise<Group> {
-    return this.groupModel
-      .findByIdAndUpdate(groupId, updateGroupDto, { new: true })
-      .exec() as Promise<Group>;
+    return this.groupModel.findByIdAndUpdate(groupId, updateGroupDto, { new: true }).exec() as Promise<Group>;
   }
 
   delete(groupId: string) {

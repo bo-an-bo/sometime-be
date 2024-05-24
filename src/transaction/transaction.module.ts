@@ -8,12 +8,7 @@ import { TransactionService } from './transaction.service';
 
 @Module({
   imports: [DatabaseModule],
-  providers: [
-    TransactionService,
-    ...transactionProviders,
-    TransactionRepository,
-    ExcelService,
-  ],
+  providers: [TransactionService, ...transactionProviders, TransactionRepository, ExcelService],
   exports: [TransactionService],
 })
 export class TransactionModule {}

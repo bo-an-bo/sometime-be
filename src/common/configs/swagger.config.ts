@@ -52,7 +52,10 @@ const devSwaggerConfig = (app: INestApplication) => {
 };
 
 const authSwaggerConfig = (app: INestApplication) => {
-  const authorizationUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_REST_API_KEY}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code&prompt=select_account`;
+  const authorizationUrl = `https://kauth.kakao.com/oauth/authorize
+  ?client_id=${process.env.KAKAO_REST_API_KEY}
+  &redirect_uri=${process.env.KAKAO_REDIRECT_URI}
+  &response_type=code&prompt=select_account`;
   const config = new DocumentBuilder()
     .setTitle('sometime API')
     .addTag('Auth', 'OAuth 인증 관련 API')

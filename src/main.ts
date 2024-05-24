@@ -14,13 +14,7 @@ async function bootstrap() {
 }
 
 bootstrap().then(() => {
-  console.log(
-    `Server running on http://localhost:${process.env.SERVER_PORT}/api`,
-  );
-  console.log(
-    `Dev server running on http://localhost:${process.env.SERVER_PORT}/dev`,
-  );
-  console.log(
-    `Auth server running on http://localhost:${process.env.SERVER_PORT}/auth`,
-  );
+  console.log(`Server running on http://localhost:${process.env.SERVER_PORT}/api`);
+  console.log(`Dev server running on http://localhost:${process.env.SERVER_PORT}/dev`);
+  console.log(`Auth server running on http://localhost:${process.env.SERVER_PORT}/auth`);
 });

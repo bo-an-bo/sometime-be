@@ -1,22 +1,5 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-  Req,
-  UploadedFile,
-  UseGuards,
-} from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOperation,
-  ApiParam,
-} from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UploadedFile, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam } from '@nestjs/swagger';
 
 import { AuthGuard } from '../auth/auth.guard';
 import { ApiFile } from '../common/decorators/api-file.decorator';
@@ -49,11 +32,7 @@ export class GroupController {
   })
   @ApiFile('memberFile')
   @ApiBody({ type: UploadGroupDto })
-  create(
-    @Req() req: any,
-    @Body() createGroupDto: CreateGroupDto,
-    @UploadedFile() memberExcel: Express.Multer.File,
-  ) {
+  create(@Req() req: any, @Body() createGroupDto: CreateGroupDto, @UploadedFile() memberExcel: Express.Multer.File) {
     return this.groupService.create(req.userId, createGroupDto, memberExcel);
   }
 
@@ -64,10 +43,7 @@ export class GroupController {
     description: '특정 모임에 멤버를 추가합니다.',
   })
   @ApiBody({ type: [CreateMemberDto] })
-  addMember(
-    @Param('groupId') groupId: string,
-    @Body() createMemberDto: CreateMemberDto[],
-  ) {
+  addMember(@Param('groupId') groupId: string, @Body() createMemberDto: CreateMemberDto[]) {
     return this.groupService.addMember(groupId, createMemberDto);
   }
 
@@ -77,10 +53,7 @@ export class GroupController {
     summary: '모임 이벤트 추가',
     description: '특정 모임에 이벤트를 추가합니다.',
   })
-  addEvent(
-    @Param('groupId') groupId: string,
-    @Body() createEventDto: CreateEventDto,
-  ) {
+  addEvent(@Param('groupId') groupId: string, @Body() createEventDto: CreateEventDto) {
     return this.groupService.addEvent(groupId, createEventDto);
   }
 
@@ -91,11 +64,7 @@ export class GroupController {
     description: '특정 모임의 특정 이벤트에 참여하는 회원 목록을 추가합니다.',
   })
   @ApiBody({ type: [String] })
-  addMemberToEvent(
-    @Param('groupId') groupId: string,
-    @Param('eventId') eventId: string,
-    @Body() memberIds: string[],
-  ) {
+  addMemberToEvent(@Param('groupId') groupId: string, @Param('eventId') eventId: string, @Body() memberIds: string[]) {
     return this.groupService.addMemberToEvent(groupId, eventId, memberIds);
   }
 
@@ -106,10 +75,7 @@ export class GroupController {
     description: '모임 회원 명단 엑셀을 업로드하고, 회원을 재구성합니다.',
   })
   @ApiFile('memberFile')
-  uploadMemberFile(
-    @Param('groupId') groupId: string,
-    @UploadedFile() memberExcel: Express.Multer.File,
-  ) {
+  uploadMemberFile(@Param('groupId') groupId: string, @UploadedFile() memberExcel: Express.Multer.File) {
     return this.groupService.uploadMemberFile(groupId, memberExcel);
   }
 
@@ -126,11 +92,7 @@ export class GroupController {
     @Body() uploadTransactionDto: UploadTransactionDto,
     @UploadedFile() transactionExcel: Express.Multer.File,
   ) {
-    return this.groupService.uploadTransactionFile(
-      groupId,
-      transactionExcel,
-      uploadTransactionDto.password,
-    );
+    return this.groupService.uploadTransactionFile(groupId, transactionExcel, uploadTransactionDto.password);
   }
 
   @Get()
@@ -139,8 +101,8 @@ export class GroupController {
     summary: '모든 모임 조회',
     description: '모든 모임을 조회합니다.',
   })
-  getAll() {
-    return this.groupService.getAll();
+  getAll(@Req() req: any) {
+    return this.groupService.getAll(req.userId);
   }
 
   @Get(':groupId')
@@ -198,10 +160,7 @@ export class GroupController {
     @Param('groupId') groupId: string,
     @Query() getTransactionsPeriodDto: GetTransactionsPeriodDto,
   ) {
-    return this.groupService.getTransactionsByPeriod(
-      groupId,
-      getTransactionsPeriodDto,
-    );
+    return this.groupService.getTransactionsByPeriod(groupId, getTransactionsPeriodDto);
   }
 
   @Get(':groupId/event/:eventId/transaction')
@@ -221,10 +180,7 @@ export class GroupController {
     required: true,
     description: '이벤트 ID',
   })
-  getTransactionsByEvent(
-    @Param('groupId') groupId: string,
-    @Param('eventId') eventId: string,
-  ) {
+  getTransactionsByEvent(@Param('groupId') groupId: string, @Param('eventId') eventId: string) {
     return this.groupService.getTransactionsByEvent(groupId, eventId);
   }
 
@@ -239,10 +195,7 @@ export class GroupController {
     summary: '모임 수정',
     description: '특정 모임을 수정합니다.',
   })
-  update(
-    @Param('groupId') groupId: string,
-    @Body() updateGroupDto: UpdateGroupDto,
-  ) {
+  update(@Param('groupId') groupId: string, @Body() updateGroupDto: UpdateGroupDto) {
     return this.groupService.update(groupId, updateGroupDto);
   }
 
@@ -295,10 +248,7 @@ export class GroupController {
     summary: '모임 멤버 삭제',
     description: '특정 모임의 멤버를 삭제합니다.',
   })
-  deleteMembers(
-    @Param('groupId') groupId: string,
-    @Body() memberIds: string[],
-  ) {
+  deleteMembers(@Param('groupId') groupId: string, @Body() memberIds: string[]) {
     return this.groupService.deleteMembers(groupId, memberIds);
   }
 
@@ -308,10 +258,7 @@ export class GroupController {
     summary: '모임 이벤트 삭제',
     description: '특정 모임의 이벤트를 삭제합니다.',
   })
-  deleteEvent(
-    @Param('groupId') groupId: string,
-    @Param('eventId') eventId: string,
-  ) {
+  deleteEvent(@Param('groupId') groupId: string, @Param('eventId') eventId: string) {
     return this.groupService.deleteEvent(groupId, eventId);
   }
 }

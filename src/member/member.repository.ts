@@ -22,9 +22,7 @@ export class MemberRepository {
   }
 
   update(memberId: string, updateMemberDto: UpdateMemberDto): Promise<Member> {
-    return this.memberModel
-      .findByIdAndUpdate(memberId, updateMemberDto, { new: true })
-      .exec() as Promise<Member>;
+    return this.memberModel.findByIdAndUpdate(memberId, updateMemberDto, { new: true }).exec() as Promise<Member>;
   }
 
   deleteMany(memberIds: string[]) {

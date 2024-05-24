@@ -23,11 +23,7 @@ export class GroupService {
     private readonly transactionService: TransactionService,
   ) {}
 
-  async create(
-    userId: string,
-    createGroupDto: CreateGroupDto,
-    memberExcel: Express.Multer.File,
-  ): Promise<Group> {
+  async create(userId: string, createGroupDto: CreateGroupDto, memberExcel: Express.Multer.File): Promise<Group> {
     const group: Group = createGroupDto as Group;
     group.owner = userId;
 
@@ -38,10 +34,7 @@ export class GroupService {
     return await this.groupRepository.create(group);
   }
 
-  async addMember(
-    groupId: string,
-    createMemberDto: CreateMemberDto[],
-  ): Promise<Group> {
+  async addMember(groupId: string, createMemberDto: CreateMemberDto[]): Promise<Group> {
     const group = await this.groupRepository.findOne(groupId);
 
     for (const member of createMemberDto) {
@@ -53,11 +46,7 @@ export class GroupService {
     return group;
   }
 
-  async addMemberToEvent(
-    groupId: string,
-    eventId: string,
-    memberIds: string[],
-  ) {
+  async addMemberToEvent(groupId: string, eventId: string, memberIds: string[]) {
     const group = await this.groupRepository.findOne(groupId);
     const event = await this.eventService.getOne(eventId);
 
@@ -73,10 +62,7 @@ export class GroupService {
     return event;
   }
 
-  async uploadMemberFile(
-    groupId: string,
-    memberExcel: Express.Multer.File,
-  ): Promise<Group> {
+  async uploadMemberFile(groupId: string, memberExcel: Express.Multer.File): Promise<Group> {
     const group: Group = await this.groupRepository.findOne(groupId);
 
     group.members = await this.memberService.uploadMemberFile(memberExcel);
@@ -84,22 +70,11 @@ export class GroupService {
     return await this.groupRepository.update(groupId, group);
   }
 
-  async uploadTransactionFile(
-    groupId: string,
-    transactionExcel: Express.Multer.File,
-    password: string,
-  ): Promise<void> {
-    await this.transactionService.uploadTransactionFile(
-      groupId,
-      transactionExcel,
-      password,
-    );
+  async uploadTransactionFile(groupId: string, transactionExcel: Express.Multer.File, password: string): Promise<void> {
+    await this.transactionService.uploadTransactionFile(groupId, transactionExcel, password);
   }
 
-  async addEvent(
-    groupId: string,
-    createEventDto: CreateEventDto,
-  ): Promise<object> {
+  async addEvent(groupId: string, createEventDto: CreateEventDto): Promise<object> {
     const group = await this.groupRepository.findOne(groupId);
     const eventId = await this.eventService.create(createEventDto);
 
@@ -109,7 +84,7 @@ export class GroupService {
     return { eventId };
   }
 
-  async getAll(): Promise<Group[]> {
+  async getAll(userId: string): Promise<Group[]> {
     return await this.groupRepository.findAll();
   }
 
@@ -152,32 +127,18 @@ export class GroupService {
     return this.eventService.compareEventTransactions(groupId, eventId);
   }
 
-  async getTransactionsByPeriod(
-    groupId: string,
-    periodDto: GetTransactionsPeriodDto,
-  ) {
-    return this.transactionService.getTransactionsByPeriod(
-      groupId,
-      periodDto.startDate,
-      periodDto.endDate,
-    );
+  async getTransactionsByPeriod(groupId: string, periodDto: GetTransactionsPeriodDto) {
+    return this.transactionService.getTransactionsByPeriod(groupId, periodDto.startDate, periodDto.endDate);
   }
 
-  async update(
-    groupId: string,
-    updateGroupDto: UpdateGroupDto,
-  ): Promise<Group> {
+  async update(groupId: string, updateGroupDto: UpdateGroupDto): Promise<Group> {
     return await this.groupRepository.update(groupId, {
       name: updateGroupDto.name,
       description: updateGroupDto.description,
     } as UpdateGroupDto);
   }
 
-  async updateMember(
-    groupId: string,
-    memberId: string,
-    updateMemberDto: UpdateMemberDto,
-  ) {
+  async updateMember(groupId: string, memberId: string, updateMemberDto: UpdateMemberDto) {
     const group = await this.groupRepository.findOne(groupId);
     const member = await this.memberService.update(memberId, updateMemberDto);
 
@@ -188,16 +149,9 @@ export class GroupService {
     return member;
   }
 
-  async updateEvent(
-    groupId: string,
-    eventId: string,
-    updateEventDto: UpdateEventDto,
-  ) {
+  async updateEvent(groupId: string, eventId: string, updateEventDto: UpdateEventDto) {
     const group: Group = await this.groupRepository.findOne(groupId);
-    const event: Event = await this.eventService.update(
-      eventId,
-      updateEventDto,
-    );
+    const event: Event = await this.eventService.update(eventId, updateEventDto);
 
     group.events = group.events.map((e) => (e === eventId ? event.id : e));
 
@@ -214,9 +168,7 @@ export class GroupService {
     const group = await this.groupRepository.findOne(groupId);
     const groupMembers = group.members;
 
-    group.members = groupMembers.filter(
-      (member) => !memberIds.includes(member),
-    );
+    group.members = groupMembers.filter((member) => !memberIds.includes(member));
     this.memberService.deleteMany(memberIds);
 
     await this.groupRepository.update(groupId, group);

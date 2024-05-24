@@ -63,15 +63,7 @@ export class ExcelService {
     const worksheet = workbook.sheet(0); // Assume we are using the first worksheet
 
     const transactions: Transaction[] = [];
-    const columns: string[] = [
-      '',
-      '거래일시',
-      '구분',
-      '거래금액',
-      '',
-      '',
-      '내용',
-    ];
+    const columns: string[] = ['', '거래일시', '구분', '거래금액', '', '', '내용'];
     const startRow = 12;
     const endRow = worksheet.usedRange().endCell().rowNumber();
 
@@ -91,16 +83,11 @@ export class ExcelService {
         const cell = row.cell(index + 1);
         const value = cell.value(); // 셀 값 가져오기
 
-        if (columnName === '거래일시' && value)
-          transaction.timestamp = this.parseDate(value.toString().trim());
-        if (columnName === '구분' && value)
-          transaction.metadata.transactionType = value.toString().trim();
+        if (columnName === '거래일시' && value) transaction.timestamp = this.parseDate(value.toString().trim());
+        if (columnName === '구분' && value) transaction.metadata.transactionType = value.toString().trim();
         if (columnName === '거래금액' && value)
-          transaction.metadata.amount = parseFloat(
-            value.toString().replace(/,/g, ''),
-          );
-        if (columnName === '내용' && value)
-          transaction.metadata.name = value.toString().trim();
+          transaction.metadata.amount = parseFloat(value.toString().replace(/,/g, ''));
+        if (columnName === '내용' && value) transaction.metadata.name = value.toString().trim();
       });
       transactions.push(transaction);
     }

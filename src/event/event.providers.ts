@@ -5,8 +5,7 @@ import { EventSchema } from './schemas/event.schema';
 export const eventProviders = [
   {
     provide: 'EVENT_MODEL',
-    useFactory: (connection: Connection) =>
-      connection.model('Event', EventSchema),
+    useFactory: (connection: Connection) => connection.model('Event', EventSchema),
     inject: ['MONGODB_CONNECTION'],
   },
 ];
