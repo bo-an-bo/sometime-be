@@ -2,26 +2,42 @@ import { Injectable } from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return createUserDto;
+  constructor(private readonly userRepository: UserRepository) {}
+
+  async create(createUserDto: CreateUserDto) {
+    return await this.userRepository.create(createUserDto);
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    return await this.userRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(userId: string): Promise<User> {
+    return await this.userRepository.findOne(userId);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return { id, updateUserDto };
+  async findOneByKakaoId(kakaoId: string) {
+    return await this.userRepository.findOneByKakaoId(kakaoId);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async update(userId: string, updateUserDto: UpdateUserDto) {
+    return { userId, updateUserDto };
+  }
+
+  removeAll() {
+    return this.userRepository.deleteAll();
+  }
+
+  remove(userId: string) {
+    return this.userRepository.delete(userId);
+  }
+
+  removeOneByKakaoId(kakaoId: string) {
+    return this.userRepository.deleteOneByKakaoId(kakaoId);
   }
 }

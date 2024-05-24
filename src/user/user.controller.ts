@@ -6,9 +6,12 @@ import {
   Param,
   Patch,
   Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+import { AuthGuard } from '../auth/auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
@@ -28,18 +31,38 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('Authorization')
+  @Get('me')
+  me(@Request() req: any) {
+    return req.user;
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Get(':userId')
+  findOne(@Param('userId') userId: string) {
+    return this.userService.findOne(userId);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @Get('kakao/:kakaoId')
+  findOneByKakaoId(@Param('kakaoId') kakaoId: string) {
+    return this.userService.findOneByKakaoId(kakaoId);
+  }
+
+  @Patch(':userId')
+  update(
+    @Param('userId') userId: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.userService.update(userId, updateUserDto);
+  }
+
+  @Delete()
+  removeAll() {
+    return this.userService.removeAll();
+  }
+
+  @Delete(':userId')
+  remove(@Param('userId') userId: string) {
+    return this.userService.remove(userId);
   }
 }

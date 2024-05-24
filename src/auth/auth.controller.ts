@@ -29,6 +29,12 @@ export class AuthController {
     return this.authService.kakaoToken(code);
   }
 
+  @Get('kakao/token/info')
+  @ApiQuery({ name: 'kakaoToken', required: true })
+  async kakaoTokenInfo(@Query('kakaoToken') kakaoToken: string) {
+    return this.authService.kakaoTokenInfo(kakaoToken);
+  }
+
   @Post('kakao/login')
   @ApiQuery({ name: 'kakaoToken', required: true })
   async kakaoLogin(@Query('kakaoToken') kakaoToken: string) {
@@ -45,5 +51,16 @@ export class AuthController {
   @ApiQuery({ name: 'kakaoToken', required: true })
   async kakaoUnlink(@Query('kakaoToken') kakaoToken: string) {
     return this.authService.kakaoUnlink(kakaoToken);
+  }
+
+  @Get('login')
+  @ApiQuery({ name: 'kakaoToken', required: true })
+  async login(@Query('kakaoToken') kakaoToken: string) {
+    return this.authService.login(kakaoToken);
+  }
+
+  @Get('signout')
+  async signout(@Query('kakaoToken') kakaoToken: string) {
+    return this.authService.signout(kakaoToken);
   }
 }
