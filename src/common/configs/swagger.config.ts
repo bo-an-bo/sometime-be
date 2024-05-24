@@ -22,6 +22,13 @@ const apiSwaggerConfig = (app: INestApplication) => {
     .addTag('Member', '모임 회원 관련 API')
     .addTag('Event', '이벤트 관련 API')
     .addTag('Transaction', '거래 내역 관련 API')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+      },
+      'Authorization',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {
@@ -55,7 +62,6 @@ const authSwaggerConfig = (app: INestApplication) => {
       flows: {
         authorizationCode: {
           authorizationUrl,
-          // tokenUrl: 'https://kauth.kakao.com/oauth/token',
           scopes: undefined,
         },
       },

@@ -9,7 +9,12 @@ import {
   Query,
   UploadedFile,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiParam } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+} from '@nestjs/swagger';
 
 import { ApiFile } from '../common/decorators/api-file.decorator';
 import { CreateEventDto } from '../event/dto/create-event.dto';
@@ -28,6 +33,7 @@ import { Group } from './group.decorators';
 import { GroupService } from './group.service';
 
 @Controller('group')
+@ApiBearerAuth('Authorization')
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
