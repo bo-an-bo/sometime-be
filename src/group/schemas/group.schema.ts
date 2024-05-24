@@ -4,9 +4,11 @@ export const GroupSchema = new Schema({
   name: String,
   description: String,
 
-  owner: String,
-  editors: { type: [String], default: [] },
-  viewers: { type: [String], default: [] },
+  auth: {
+    owner: String,
+    editors: [String],
+    viewers: [String],
+  },
 
   members: { type: [String], default: [] },
   events: { type: [String], default: [] },

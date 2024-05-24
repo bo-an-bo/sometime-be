@@ -4,9 +4,11 @@ export interface GroupInterface extends Document {
   name: string;
   description: string;
 
-  owner: any;
-  editors: any[];
-  viewers: any[];
+  auth: {
+    owner: string;
+    editors: string[];
+    viewers: string[];
+  };
 
   members: any[];
   events: any[];
