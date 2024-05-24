@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UploadedFile,
   UseGuards,
 } from '@nestjs/common';
@@ -49,10 +50,11 @@ export class GroupController {
   @ApiFile('memberFile')
   @ApiBody({ type: UploadGroupDto })
   create(
+    @Req() req: any,
     @Body() createGroupDto: CreateGroupDto,
     @UploadedFile() memberExcel: Express.Multer.File,
   ) {
-    return this.groupService.create(createGroupDto, memberExcel);
+    return this.groupService.create(req.userId, createGroupDto, memberExcel);
   }
 
   @Post(':groupId/member')

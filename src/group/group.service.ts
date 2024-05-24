@@ -24,10 +24,12 @@ export class GroupService {
   ) {}
 
   async create(
+    userId: string,
     createGroupDto: CreateGroupDto,
     memberExcel: Express.Multer.File,
   ): Promise<Group> {
     const group: Group = createGroupDto as Group;
+    group.manager = userId;
 
     if (memberExcel) {
       group.members = await this.memberService.uploadMemberFile(memberExcel);
