@@ -32,7 +32,7 @@ const apiSwaggerConfig = (app: INestApplication) => {
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {
-    include: [GroupModule, MemberModule, EventModule, TransactionModule],
+    include: [GroupModule, MemberModule, EventModule, TransactionModule, UserModule],
   });
   SwaggerModule.setup('api', app, document);
 };
