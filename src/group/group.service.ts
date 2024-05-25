@@ -241,6 +241,7 @@ export class GroupService {
   async inviteEditor(senderId: string, groupId: string, receiverId: string) {
     const group = await this.groupRepository.findOne(groupId);
     this.groupValidator.validateGroupOwner(group, senderId);
+    this.groupValidator.validateGroupInvite(group, receiverId);
 
     group.auth.editors.push(receiverId);
     await this.userService.pushEditor(receiverId, groupId);
@@ -251,6 +252,7 @@ export class GroupService {
   async inviteViewer(senderId: string, groupId: string, receiverId: string) {
     const group = await this.groupRepository.findOne(groupId);
     this.groupValidator.validateGroupViewer(group, senderId);
+    this.groupValidator.validateGroupInvite(group, receiverId);
 
     group.auth.viewers.push(receiverId);
     await this.userService.pushViewer(receiverId, groupId);
