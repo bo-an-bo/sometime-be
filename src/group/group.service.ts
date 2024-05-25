@@ -142,6 +142,10 @@ export class GroupService {
     });
   }
 
+  async getEvent(groupId: string, eventId: string) {
+    return this.eventService.getOne(eventId);
+  }
+
   async getTransactions(groupId: string) {
     return this.transactionService.getTransactions(groupId);
   }
