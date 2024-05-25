@@ -238,6 +238,26 @@ export class GroupService {
     await this.groupRepository.update(groupId, group);
   }
 
+  async inviteEditor(senderId: string, groupId: string, receiverId: string) {
+    const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroupOwner(group, senderId);
+
+    group.auth.editors.push(receiverId);
+    await this.userService.pushEditor(receiverId, groupId);
+
+    return await this.groupRepository.update(groupId, group);
+  }
+
+  async inviteViewer(senderId: string, groupId: string, receiverId: string) {
+    const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroupViewer(group, senderId);
+
+    group.auth.viewers.push(receiverId);
+    await this.userService.pushViewer(receiverId, groupId);
+
+    return await this.groupRepository.update(groupId, group);
+  }
+
   private async getAllMembers(memberIds: string[]) {
     const members = [];
     for (const memberId of memberIds) {

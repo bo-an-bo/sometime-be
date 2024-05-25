@@ -13,6 +13,7 @@ import { Member } from '../member/member.decorators';
 import { GetTransactionsPeriodDto } from '../transaction/dto/get-transaction-period-dto';
 import { UploadTransactionDto } from '../transaction/dto/upload-transaction-dto';
 import { Transaction } from '../transaction/transaction.decorators';
+import { User } from '../user/user.decorator';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { UploadGroupDto } from './dto/upload-group.dto';
@@ -303,5 +304,33 @@ export class GroupController {
     @Param('eventId', new ParseObjectIdPipe()) eventId: string,
   ) {
     return this.groupService.deleteEvent(req.userId, groupId, eventId);
+  }
+
+  @Post(':groupId/invite/editor')
+  @User()
+  @ApiOperation({
+    summary: '모임 편집자 초대',
+    description: '특정 모임에 편집자를 초대합니다.',
+  })
+  inviteEditor(
+    @Req() req: any,
+    @Param('groupId', new ParseObjectIdPipe()) groupId: string,
+    @Query('userId', new ParseObjectIdPipe()) userId: string,
+  ) {
+    return this.groupService.inviteEditor(req.userId, groupId, userId);
+  }
+
+  @Post(':groupId/invite/viewer')
+  @User()
+  @ApiOperation({
+    summary: '모임 조회자 초대',
+    description: '특정 모임에 조회자를 초대합니다.',
+  })
+  inviteViewer(
+    @Req() req: any,
+    @Param('groupId', new ParseObjectIdPipe()) groupId: string,
+    @Query('userId', new ParseObjectIdPipe()) userId: string,
+  ) {
+    return this.groupService.inviteViewer(req.userId, groupId, userId);
   }
 }
