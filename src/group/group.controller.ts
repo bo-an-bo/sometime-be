@@ -58,8 +58,12 @@ export class GroupController {
     summary: '모임 이벤트 추가',
     description: '특정 모임에 이벤트를 추가합니다.',
   })
-  addEvent(@Param('groupId', new ParseObjectIdPipe()) groupId: string, @Body() createEventDto: CreateEventDto) {
-    return this.groupService.addEvent(groupId, createEventDto);
+  addEvent(
+    @Req() req: any,
+    @Param('groupId', new ParseObjectIdPipe()) groupId: string,
+    @Body() createEventDto: CreateEventDto,
+  ) {
+    return this.groupService.addEvent(req.userId, groupId, createEventDto);
   }
 
   @Post(':groupId/event/:eventId/member')
@@ -70,11 +74,12 @@ export class GroupController {
   })
   @ApiBody({ type: [String] })
   addMemberToEvent(
+    @Req() req: any,
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
     @Param('eventId', new ParseObjectIdPipe()) eventId: string,
     @Body() memberIds: string[],
   ) {
-    return this.groupService.addMemberToEvent(groupId, eventId, memberIds);
+    return this.groupService.addMemberToEvent(req.userId, groupId, eventId, memberIds);
   }
 
   @Post(':groupId/member/excel')
@@ -85,10 +90,11 @@ export class GroupController {
   })
   @ApiFile('memberFile')
   uploadMemberFile(
+    @Req() req: any,
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
     @UploadedFile() memberExcel: Express.Multer.File,
   ) {
-    return this.groupService.uploadMemberFile(groupId, memberExcel);
+    return this.groupService.uploadMemberFile(req.userId, groupId, memberExcel);
   }
 
   @Post(':groupId/transaction/excel')
@@ -100,11 +106,17 @@ export class GroupController {
   @ApiFile('transactionFile')
   @ApiBody({ type: UploadTransactionDto })
   uploadTransactionFile(
+    @Req() req: any,
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
     @Body() uploadTransactionDto: UploadTransactionDto,
     @UploadedFile() transactionExcel: Express.Multer.File,
   ) {
-    return this.groupService.uploadTransactionFile(groupId, transactionExcel, uploadTransactionDto.password);
+    return this.groupService.uploadTransactionFile(
+      req.userId,
+      groupId,
+      transactionExcel,
+      uploadTransactionDto.password,
+    );
   }
 
   @Get()
@@ -128,8 +140,8 @@ export class GroupController {
     summary: '모임 상세 조회',
     description: '특정 모임을 조회합니다. (멤버, 이벤트 포함)',
   })
-  getOne(@Param('groupId', new ParseObjectIdPipe()) groupId: string) {
-    return this.groupService.getOne(groupId);
+  getOne(@Req() req: any, @Param('groupId', new ParseObjectIdPipe()) groupId: string) {
+    return this.groupService.getOne(req.userId, groupId);
   }
 
   @Get(':groupId/member')
@@ -138,8 +150,8 @@ export class GroupController {
     summary: '모임 멤버 조회',
     description: '특정 모임의 멤버를 조회합니다.',
   })
-  getMembers(@Param('groupId', new ParseObjectIdPipe()) groupId: string) {
-    return this.groupService.getMembers(groupId);
+  getMembers(@Req() req: any, @Param('groupId', new ParseObjectIdPipe()) groupId: string) {
+    return this.groupService.getMembers(req.userId, groupId);
   }
 
   @Get(':groupId/event')
@@ -148,8 +160,8 @@ export class GroupController {
     summary: '모임 이벤트 조회',
     description: '특정 모임의 이벤트를 조회합니다.',
   })
-  getEvents(@Param('groupId', new ParseObjectIdPipe()) groupId: string) {
-    return this.groupService.getEvents(groupId);
+  getEvents(@Req() req: any, @Param('groupId', new ParseObjectIdPipe()) groupId: string) {
+    return this.groupService.getEvents(req.userId, groupId);
   }
 
   @Get(':groupId/transaction')
@@ -158,8 +170,8 @@ export class GroupController {
     summary: '모임 거래내역 조회',
     description: '특정 모임의 거래내역을 조회합니다.',
   })
-  getTransactions(@Param('groupId', new ParseObjectIdPipe()) groupId: string) {
-    return this.groupService.getTransactions(groupId);
+  getTransactions(@Req() req: any, @Param('groupId', new ParseObjectIdPipe()) groupId: string) {
+    return this.groupService.getTransactions(req.userId, groupId);
   }
 
   @Get(':groupId/transaction/period')
@@ -169,10 +181,11 @@ export class GroupController {
     description: '특정 모임의 거래내역을 기간을 설정하여 조회합니다.',
   })
   getTransactionsByPeriod(
+    @Req() req: any,
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
     @Query() getTransactionsPeriodDto: GetTransactionsPeriodDto,
   ) {
-    return this.groupService.getTransactionsByPeriod(groupId, getTransactionsPeriodDto);
+    return this.groupService.getTransactionsByPeriod(req.userId, groupId, getTransactionsPeriodDto);
   }
 
   @Get(':groupId/event/:eventId/transaction')
@@ -193,10 +206,11 @@ export class GroupController {
     description: '이벤트 ID',
   })
   getTransactionsByEvent(
+    @Req() req: any,
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
     @Param('eventId', new ParseObjectIdPipe()) eventId: string,
   ) {
-    return this.groupService.getTransactionsByEvent(groupId, eventId);
+    return this.groupService.getTransactionsByEvent(req.userId, groupId, eventId);
   }
 
   @Patch(':groupId')
@@ -210,8 +224,12 @@ export class GroupController {
     summary: '모임 수정',
     description: '특정 모임을 수정합니다.',
   })
-  update(@Param('groupId', new ParseObjectIdPipe()) groupId: string, @Body() updateGroupDto: UpdateGroupDto) {
-    return this.groupService.update(groupId, updateGroupDto);
+  update(
+    @Req() req: any,
+    @Param('groupId', new ParseObjectIdPipe()) groupId: string,
+    @Body() updateGroupDto: UpdateGroupDto,
+  ) {
+    return this.groupService.update(req.userId, groupId, updateGroupDto);
   }
 
   @Patch(':groupId/member/:memberId')
@@ -221,11 +239,12 @@ export class GroupController {
     description: '특정 모임의 멤버를 수정합니다.',
   })
   updateMember(
+    @Req() req: any,
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
     @Param('memberId', new ParseObjectIdPipe()) memberId: string,
     @Body() updateMemberDto: UpdateMemberDto,
   ) {
-    return this.groupService.updateMember(groupId, memberId, updateMemberDto);
+    return this.groupService.updateMember(req.userId, groupId, memberId, updateMemberDto);
   }
 
   @Patch(':groupId/event/:eventId')
@@ -235,11 +254,12 @@ export class GroupController {
     description: '특정 모임의 이벤트를 수정합니다.',
   })
   updateEvent(
+    @Req() req: any,
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
     @Param('eventId', new ParseObjectIdPipe()) eventId: string,
     @Body() updateEventDto: UpdateEventDto,
   ) {
-    return this.groupService.updateEvent(groupId, eventId, updateEventDto);
+    return this.groupService.updateEvent(req.userId, groupId, eventId, updateEventDto);
   }
 
   @Delete(':groupId')
@@ -253,8 +273,8 @@ export class GroupController {
     summary: '모임 삭제',
     description: '특정 모임을 삭제합니다.',
   })
-  delete(@Param('groupId', new ParseObjectIdPipe()) groupId: string) {
-    return this.groupService.delete(groupId);
+  delete(@Req() req: any, @Param('groupId', new ParseObjectIdPipe()) groupId: string) {
+    return this.groupService.delete(req.userId, groupId);
   }
 
   @Delete(':groupId/member')
@@ -263,8 +283,12 @@ export class GroupController {
     summary: '모임 멤버 삭제',
     description: '특정 모임의 멤버를 삭제합니다.',
   })
-  deleteMembers(@Param('groupId', new ParseObjectIdPipe()) groupId: string, @Body() memberIds: string[]) {
-    return this.groupService.deleteMembers(groupId, memberIds);
+  deleteMembers(
+    @Req() req: any,
+    @Param('groupId', new ParseObjectIdPipe()) groupId: string,
+    @Body() memberIds: string[],
+  ) {
+    return this.groupService.deleteMembers(req.userId, groupId, memberIds);
   }
 
   @Delete(':groupId/event/:eventId')
@@ -274,9 +298,10 @@ export class GroupController {
     description: '특정 모임의 이벤트를 삭제합니다.',
   })
   deleteEvent(
+    @Req() req: any,
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
     @Param('eventId', new ParseObjectIdPipe()) eventId: string,
   ) {
-    return this.groupService.deleteEvent(groupId, eventId);
+    return this.groupService.deleteEvent(req.userId, groupId, eventId);
   }
 }
