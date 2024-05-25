@@ -71,7 +71,7 @@ export class GroupController {
   @ApiBody({ type: [String] })
   addMemberToEvent(
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
-    @Param('eventId') eventId: string,
+    @Param('eventId', new ParseObjectIdPipe()) eventId: string,
     @Body() memberIds: string[],
   ) {
     return this.groupService.addMemberToEvent(groupId, eventId, memberIds);
@@ -194,7 +194,7 @@ export class GroupController {
   })
   getTransactionsByEvent(
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
-    @Param('eventId') eventId: string,
+    @Param('eventId', new ParseObjectIdPipe()) eventId: string,
   ) {
     return this.groupService.getTransactionsByEvent(groupId, eventId);
   }
@@ -236,7 +236,7 @@ export class GroupController {
   })
   updateEvent(
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
-    @Param('eventId') eventId: string,
+    @Param('eventId', new ParseObjectIdPipe()) eventId: string,
     @Body() updateEventDto: UpdateEventDto,
   ) {
     return this.groupService.updateEvent(groupId, eventId, updateEventDto);
@@ -273,7 +273,10 @@ export class GroupController {
     summary: '모임 이벤트 삭제',
     description: '특정 모임의 이벤트를 삭제합니다.',
   })
-  deleteEvent(@Param('groupId', new ParseObjectIdPipe()) groupId: string, @Param('eventId') eventId: string) {
+  deleteEvent(
+    @Param('groupId', new ParseObjectIdPipe()) groupId: string,
+    @Param('eventId', new ParseObjectIdPipe()) eventId: string,
+  ) {
     return this.groupService.deleteEvent(groupId, eventId);
   }
 }
