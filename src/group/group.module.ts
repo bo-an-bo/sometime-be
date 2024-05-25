@@ -9,11 +9,12 @@ import { GroupController } from './group.controller';
 import { groupProviders } from './group.providers';
 import { GroupRepository } from './group.repository';
 import { GroupService } from './group.service';
+import { GroupValidator } from './group.validator';
 
 @Module({
   imports: [DatabaseModule, MemberModule, EventModule, TransactionModule, UserModule],
   controllers: [GroupController],
-  providers: [GroupService, ...groupProviders, GroupRepository],
+  providers: [GroupService, ...groupProviders, GroupRepository, GroupValidator],
   exports: [GroupService],
 })
 export class GroupModule {}
