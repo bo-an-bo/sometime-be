@@ -86,9 +86,7 @@ export class EventRepository {
   }
 
   update(eventId: string, event: Event): Promise<Event> {
-    return this.eventModel
-      .findByIdAndUpdate(eventId, event, { new: true })
-      .exec() as Promise<Event>;
+    return this.eventModel.findByIdAndUpdate(eventId, event, { new: true }).exec() as Promise<Event>;
   }
 
   delete(eventId: string) {

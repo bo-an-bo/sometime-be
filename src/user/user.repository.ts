@@ -29,9 +29,7 @@ export class UserRepository {
   }
 
   update(userId: string, updateUserDto: CreateUserDto) {
-    return this.userModel
-      .findByIdAndUpdate(userId, updateUserDto, { new: true })
-      .exec() as Promise<User>;
+    return this.userModel.findByIdAndUpdate(userId, updateUserDto, { new: true }).exec() as Promise<User>;
   }
 
   deleteAll() {

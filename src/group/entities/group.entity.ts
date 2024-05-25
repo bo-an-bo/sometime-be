@@ -2,13 +2,13 @@ export class Group {
   id: string;
   name: string;
   description: string;
-  manager: string;
-  subManagers: [
-    {
-      user: string;
-      authorities: string[];
-    },
-  ];
+
+  auth: {
+    owner: any;
+    editors: any[];
+    viewers: any[];
+  };
+
   members: any[];
   events: any[];
 }

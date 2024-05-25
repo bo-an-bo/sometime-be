@@ -19,11 +19,7 @@ export class TransactionRepository {
     return this.transactionModel.find({ 'metadata.groupId': groupId });
   }
 
-  async getTransactionsByPeriod(
-    groupId: string,
-    startDate: Date,
-    endDate: Date,
-  ): Promise<any> {
+  async getTransactionsByPeriod(groupId: string, startDate: Date, endDate: Date): Promise<any> {
     return this.transactionModel
       .find({
         'metadata.groupId': groupId,

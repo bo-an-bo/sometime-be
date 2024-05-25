@@ -22,10 +22,17 @@ const apiSwaggerConfig = (app: INestApplication) => {
     .addTag('Member', '모임 회원 관련 API')
     .addTag('Event', '이벤트 관련 API')
     .addTag('Transaction', '거래 내역 관련 API')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+      },
+      'Authorization',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {
-    include: [GroupModule, MemberModule, EventModule, TransactionModule],
+    include: [GroupModule, MemberModule, EventModule, TransactionModule, UserModule],
   });
   SwaggerModule.setup('api', app, document);
 };
@@ -45,7 +52,10 @@ const devSwaggerConfig = (app: INestApplication) => {
 };
 
 const authSwaggerConfig = (app: INestApplication) => {
-  const authorizationUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_REST_API_KEY}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code&prompt=select_account`;
+  const authorizationUrl = `https://kauth.kakao.com/oauth/authorize
+  ?client_id=${process.env.KAKAO_REST_API_KEY}
+  &redirect_uri=${process.env.KAKAO_REDIRECT_URI}
+  &response_type=code&prompt=select_account`;
   const config = new DocumentBuilder()
     .setTitle('sometime API')
     .addTag('Auth', 'OAuth 인증 관련 API')
@@ -55,7 +65,6 @@ const authSwaggerConfig = (app: INestApplication) => {
       flows: {
         authorizationCode: {
           authorizationUrl,
-          // tokenUrl: 'https://kauth.kakao.com/oauth/token',
           scopes: undefined,
         },
       },

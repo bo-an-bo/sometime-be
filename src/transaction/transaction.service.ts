@@ -11,18 +11,13 @@ export class TransactionService {
     private readonly excelService: ExcelService,
   ) {}
 
-  async uploadTransactionFile(
-    groupId: string,
-    transactionFile: Express.Multer.File,
-    password: string,
-  ): Promise<void> {
+  async uploadTransactionFile(groupId: string, transactionFile: Express.Multer.File, password: string): Promise<void> {
     await this.transactionRepository.deleteMany(groupId);
-    const transactions: Transaction[] =
-      await this.excelService.convertTransactionFileToTransactionArr(
-        groupId,
-        transactionFile,
-        password,
-      );
+    const transactions: Transaction[] = await this.excelService.convertTransactionFileToTransactionArr(
+      groupId,
+      transactionFile,
+      password,
+    );
     await this.transactionRepository.createMany(transactions);
   }
 
@@ -30,15 +25,7 @@ export class TransactionService {
     return this.transactionRepository.getTransactions(groupId);
   }
 
-  async getTransactionsByPeriod(
-    groupId: string,
-    startDate: Date,
-    endDate: Date,
-  ) {
-    return this.transactionRepository.getTransactionsByPeriod(
-      groupId,
-      startDate,
-      endDate,
-    );
+  async getTransactionsByPeriod(groupId: string, startDate: Date, endDate: Date) {
+    return this.transactionRepository.getTransactionsByPeriod(groupId, startDate, endDate);
   }
 }
