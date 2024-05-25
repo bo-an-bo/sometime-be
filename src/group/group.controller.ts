@@ -184,8 +184,8 @@ export class GroupController {
     summary: '모임 이벤트 상세 조회',
     description: '특정 모임의 특정 이벤트를 조회합니다.',
   })
-  getEvent(@Param('groupId') groupId: string, @Param('eventId') eventId: string) {
-    return this.groupService.getEvents(groupId, eventId);
+  getEvent(@Req() req: any, @Param('groupId') groupId: string, @Param('eventId') eventId: string) {
+    return this.groupService.getEvent(req.userId, groupId, eventId);
   }
 
   @Get(':groupId/transaction')

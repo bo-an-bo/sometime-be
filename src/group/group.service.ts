@@ -151,6 +151,13 @@ export class GroupService {
     return await this.getAllEvents(group.events);
   }
 
+  async getEvent(userId: string, groupId: string, eventId: string) {
+    const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroupViewer(group, userId);
+
+    return this.eventService.getOne(eventId);
+  }
+
   async getTransactions(userId: string, groupId: string) {
     const group = await this.groupRepository.findOne(groupId);
     this.groupValidator.validateGroupViewer(group, userId);
