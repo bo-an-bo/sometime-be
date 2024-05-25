@@ -222,7 +222,7 @@ export class GroupController {
   })
   updateMember(
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
-    @Param('memberId') memberId: string,
+    @Param('memberId', new ParseObjectIdPipe()) memberId: string,
     @Body() updateMemberDto: UpdateMemberDto,
   ) {
     return this.groupService.updateMember(groupId, memberId, updateMemberDto);
