@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import mongoose from 'mongoose';
 
 import { CreateEventDto } from '../event/dto/create-event.dto';
 import { UpdateEventDto } from '../event/dto/update-event.dto';
@@ -219,6 +220,14 @@ export class GroupService {
     this.groupValidator.validateGroupEditor(group, userId);
 
     const groupMembers = group.members;
+    for (const memberId of memberIds) {
+      if (!mongoose.Types.ObjectId.isValid(memberId)) {
+        throw new Error('유효하지 않은 ObjectId입니다.');
+      }
+      if (!groupMembers.includes(memberId)) {
+        throw new Error('멤버가 존재하지 않습니다.');
+      }
+    }
 
     group.members = groupMembers.filter((member) => !memberIds.includes(member));
     this.memberService.deleteMany(memberIds);

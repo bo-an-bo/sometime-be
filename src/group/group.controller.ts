@@ -1,4 +1,17 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UploadedFile, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseArrayPipe,
+  Patch,
+  Post,
+  Query,
+  Req,
+  UploadedFile,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam } from '@nestjs/swagger';
 
 import { AuthGuard } from '../auth/auth.guard';
@@ -287,7 +300,7 @@ export class GroupController {
   deleteMembers(
     @Req() req: any,
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
-    @Body() memberIds: string[],
+    @Body(new ParseArrayPipe({ items: String, separator: ',' })) memberIds: string[],
   ) {
     return this.groupService.deleteMembers(req.userId, groupId, memberIds);
   }
