@@ -56,7 +56,7 @@ export class EventRepository {
                   $and: [
                     { $gte: ['$timestamp', '$$startDate'] },
                     { $lte: ['$timestamp', '$$endDate'] },
-                    { $eq: ['$metadata.groupId', groupId] },
+                    { $eq: ['$metadata.groupId', String(groupId)] },
                     { $eq: ['$metadata.name', '$$member_name'] },
                     { $eq: ['$metadata.amount', '$$fee_amount'] },
                   ],
