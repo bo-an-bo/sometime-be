@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseArrayPipe,
+  ParseEnumPipe,
   Patch,
   Post,
   Query,
@@ -12,7 +13,7 @@ import {
   UploadedFile,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
 
 import { AuthGuard } from '../auth/auth.guard';
 import { ApiFile } from '../common/decorators/api-file.decorator';
@@ -329,31 +330,45 @@ export class GroupController {
     return this.groupService.deleteEvent(req.userId, groupId, eventId);
   }
 
-  @Post(':groupId/invite/editor')
+  @Post(':groupId/user/:userId')
   @User()
   @ApiOperation({
-    summary: '모임 편집자 초대',
-    description: '특정 모임에 편집자를 초대합니다.',
+    summary: '사용자 모임 초대',
+    description: '특정 모임에 사용자를 초대합니다.',
   })
-  inviteEditor(
+  @ApiQuery({
+    name: 'role',
+    required: true,
+    description: '권한',
+    enum: ['editor', 'viewer'],
+  })
+  invite(
     @Req() req: any,
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
-    @Query('userId', new ParseObjectIdPipe()) userId: string,
+    @Param('userId', new ParseObjectIdPipe()) userId: string,
+    @Query('role', new ParseEnumPipe({ enum: ['editor', 'viewer'] })) role: string,
   ) {
-    return this.groupService.inviteEditor(req.userId, groupId, userId);
+    return this.groupService.invite(req.userId, groupId, userId, role);
   }
 
-  @Post(':groupId/invite/viewer')
+  @Patch(':groupId/user/:userId')
   @User()
   @ApiOperation({
-    summary: '모임 조회자 초대',
-    description: '특정 모임에 조회자를 초대합니다.',
+    summary: '모임 사용자 권한 변경',
+    description: '특정 모임의 관리자 사용자의 권한을 변경합니다.',
   })
-  inviteViewer(
+  @ApiQuery({
+    name: 'role',
+    required: true,
+    description: '권한',
+    enum: ['editor', 'viewer'],
+  })
+  changeRole(
     @Req() req: any,
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
-    @Query('userId', new ParseObjectIdPipe()) userId: string,
+    @Param('userId', new ParseObjectIdPipe()) userId: string,
+    @Query('role', new ParseEnumPipe({ enum: ['editor', 'viewer'] })) role: string,
   ) {
-    return this.groupService.inviteViewer(req.userId, groupId, userId);
+    return this.groupService.changeRole(req.userId, groupId, userId, role);
   }
 }

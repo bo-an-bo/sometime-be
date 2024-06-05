@@ -47,6 +47,7 @@ export class GroupService {
 
   async addMember(userId: string, groupId: string, createMemberDto: CreateMemberDto[]): Promise<Group> {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupEditor(group, userId);
 
     for (const member of createMemberDto) {
@@ -60,6 +61,7 @@ export class GroupService {
 
   async addMemberToEvent(userId: string, groupId: string, eventId: string, memberIds: string[]) {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupEditor(group, userId);
 
     const event = await this.eventService.getOne(eventId);
@@ -78,6 +80,7 @@ export class GroupService {
 
   async uploadMemberFile(userId: string, groupId: string, memberExcel: Express.Multer.File): Promise<Group> {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupEditor(group, userId);
 
     group.members = await this.memberService.uploadMemberFile(memberExcel);
@@ -99,6 +102,7 @@ export class GroupService {
 
   async addEvent(userId: string, groupId: string, createEventDto: CreateEventDto): Promise<object> {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupEditor(group, userId);
 
     const eventId = await this.eventService.create(createEventDto);
@@ -118,6 +122,7 @@ export class GroupService {
 
   async getOne(userId: string, groupId: string): Promise<Group> {
     const group: Group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupViewer(group, userId);
 
     const members = await this.getAllMembers(group.members);
@@ -131,6 +136,7 @@ export class GroupService {
 
   async getMembers(userId: string, groupId: string) {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupViewer(group, userId);
 
     const members = await this.getAllMembers(group.members);
@@ -146,6 +152,7 @@ export class GroupService {
 
   async getEvents(userId: string, groupId: string) {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupViewer(group, userId);
 
     return await this.getAllEvents(group.events);
@@ -153,6 +160,7 @@ export class GroupService {
 
   async getEvent(userId: string, groupId: string, eventId: string) {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupViewer(group, userId);
 
     return this.eventService.getOne(eventId);
@@ -160,6 +168,7 @@ export class GroupService {
 
   async getTransactions(userId: string, groupId: string) {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupViewer(group, userId);
 
     return this.transactionService.getTransactions(groupId);
@@ -167,6 +176,7 @@ export class GroupService {
 
   async getTransactionsByEvent(userId: string, groupId: string, eventId: string) {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupViewer(group, userId);
 
     return this.eventService.compareEventTransactions(groupId, eventId);
@@ -174,6 +184,7 @@ export class GroupService {
 
   async getTransactionsByPeriod(userId: string, groupId: string, periodDto: GetTransactionsPeriodDto) {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupViewer(group, userId);
 
     return this.transactionService.getTransactionsByPeriod(groupId, periodDto.startDate, periodDto.endDate);
@@ -181,6 +192,7 @@ export class GroupService {
 
   async update(userId: string, groupId: string, updateGroupDto: UpdateGroupDto): Promise<Group> {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupEditor(group, userId);
 
     return await this.groupRepository.update(groupId, {
@@ -191,6 +203,7 @@ export class GroupService {
 
   async updateMember(userId: string, groupId: string, memberId: string, updateMemberDto: UpdateMemberDto) {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupEditor(group, userId);
 
     const member = await this.memberService.update(memberId, updateMemberDto);
@@ -204,6 +217,7 @@ export class GroupService {
 
   async updateEvent(userId: string, groupId: string, eventId: string, updateEventDto: UpdateEventDto) {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupEditor(group, userId);
 
     const event = await this.eventService.update(eventId, updateEventDto);
@@ -217,6 +231,7 @@ export class GroupService {
 
   async delete(userId: string, groupId: string): Promise<void> {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupOwner(group, userId);
 
     return this.groupRepository.delete(groupId);
@@ -224,6 +239,7 @@ export class GroupService {
 
   async deleteMembers(userId: string, groupId: string, memberIds: string[]): Promise<void> {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupEditor(group, userId);
 
     const groupMembers = group.members;
@@ -244,6 +260,7 @@ export class GroupService {
 
   async deleteEvent(userId: string, groupId: string, eventId: string): Promise<void> {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupEditor(group, userId);
 
     const groupEvents = group.events;
@@ -254,8 +271,29 @@ export class GroupService {
     await this.groupRepository.update(groupId, group);
   }
 
-  async inviteEditor(senderId: string, groupId: string, receiverId: string) {
+  async invite(senderId: string, groupId: string, receiverId: string, role: string) {
+    if (role === 'editor') {
+      return await this.inviteEditor(senderId, groupId, receiverId);
+    } else if (role === 'viewer') {
+      return await this.inviteViewer(senderId, groupId, receiverId);
+    } else {
+      throw new Error('유효하지 않은 권한입니다.');
+    }
+  }
+
+  async changeRole(senderId: string, groupId: string, receiverId: string, role: string) {
+    if (role === 'editor') {
+      return await this.changeToEditor(senderId, groupId, receiverId);
+    } else if (role === 'viewer') {
+      return await this.changeToViewer(senderId, groupId, receiverId);
+    } else {
+      throw new Error('유효하지 않은 권한입니다.');
+    }
+  }
+
+  private async inviteEditor(senderId: string, groupId: string, receiverId: string) {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupOwner(group, senderId);
     this.groupValidator.validateGroupInvite(group, receiverId);
 
@@ -265,8 +303,9 @@ export class GroupService {
     return await this.groupRepository.update(groupId, group);
   }
 
-  async inviteViewer(senderId: string, groupId: string, receiverId: string) {
+  private async inviteViewer(senderId: string, groupId: string, receiverId: string) {
     const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
     this.groupValidator.validateGroupViewer(group, senderId);
     this.groupValidator.validateGroupInvite(group, receiverId);
 
@@ -274,6 +313,40 @@ export class GroupService {
     await this.userService.pushViewer(receiverId, groupId);
 
     return await this.groupRepository.update(groupId, group);
+  }
+
+  private async changeToEditor(senderId: string, groupId: string, receiverId: string) {
+    const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
+    this.groupValidator.validateGroupOwner(group, senderId);
+
+    if (!group.auth.viewers.includes(receiverId)) {
+      throw new Error('대상이 조회자가 아닙니다.');
+    }
+
+    if (group.auth.editors.includes(receiverId)) {
+      throw new Error('이미 편집자입니다.');
+    }
+
+    group.auth.viewers = group.auth.viewers.filter((viewer) => viewer !== receiverId);
+    group.auth.editors.push(receiverId);
+  }
+
+  private async changeToViewer(senderId: string, groupId: string, receiverId: string) {
+    const group = await this.groupRepository.findOne(groupId);
+    this.groupValidator.validateGroup(group);
+    this.groupValidator.validateGroupOwner(group, senderId);
+
+    if (!group.auth.editors.includes(receiverId)) {
+      throw new Error('대상이 편집자가 아닙니다.');
+    }
+
+    if (group.auth.viewers.includes(receiverId)) {
+      throw new Error('이미 조회자입니다.');
+    }
+
+    group.auth.editors = group.auth.editors.filter((editor) => editor !== receiverId);
+    group.auth.viewers.push(receiverId);
   }
 
   private async getAllMembers(memberIds: string[]) {
