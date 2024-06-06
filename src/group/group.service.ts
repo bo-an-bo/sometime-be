@@ -328,8 +328,13 @@ export class GroupService {
       throw new Error('이미 편집자입니다.');
     }
 
-    group.auth.viewers = group.auth.viewers.filter((viewer) => viewer !== receiverId);
+    group.auth.viewers = group.auth.viewers.filter((viewer) => viewer !== receiverId.toString());
     group.auth.editors.push(receiverId);
+
+    await this.userService.pushEditor(receiverId, groupId);
+    await this.userService.popViewer(receiverId, groupId);
+
+    return await this.groupRepository.update(groupId, group);
   }
 
   private async changeToViewer(senderId: string, groupId: string, receiverId: string) {
@@ -345,8 +350,13 @@ export class GroupService {
       throw new Error('이미 조회자입니다.');
     }
 
-    group.auth.editors = group.auth.editors.filter((editor) => editor !== receiverId);
+    group.auth.editors = group.auth.editors.filter((editor) => editor !== receiverId.toString());
     group.auth.viewers.push(receiverId);
+
+    await this.userService.pushViewer(receiverId, groupId);
+    await this.userService.popEditor(receiverId, groupId);
+
+    return await this.groupRepository.update(groupId, group);
   }
 
   private async getAllMembers(memberIds: string[]) {

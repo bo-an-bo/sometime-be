@@ -5,7 +5,6 @@ import {
   Get,
   Param,
   ParseArrayPipe,
-  ParseEnumPipe,
   Patch,
   Post,
   Query,
@@ -346,7 +345,7 @@ export class GroupController {
     @Req() req: any,
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
     @Param('userId', new ParseObjectIdPipe()) userId: string,
-    @Query('role', new ParseEnumPipe({ enum: ['editor', 'viewer'] })) role: string,
+    @Query('role') role: string,
   ) {
     return this.groupService.invite(req.userId, groupId, userId, role);
   }
@@ -367,7 +366,7 @@ export class GroupController {
     @Req() req: any,
     @Param('groupId', new ParseObjectIdPipe()) groupId: string,
     @Param('userId', new ParseObjectIdPipe()) userId: string,
-    @Query('role', new ParseEnumPipe({ enum: ['editor', 'viewer'] })) role: string,
+    @Query('role') role: string,
   ) {
     return this.groupService.changeRole(req.userId, groupId, userId, role);
   }
